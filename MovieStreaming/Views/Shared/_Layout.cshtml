@@ -1,0 +1,367 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="Premium Multipurpose Admin & Dashboard Template" name="description" />
+    <meta content="Themesbrand" name="author" />
+    <title>@ViewData["Title"] Movie Streaming</title>
+    <link href="~/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css">
+    <link href="~/css/icons.min.css" rel="stylesheet" type="text/css">
+    <link href="~/css/app.min.css" id="app-style" rel="stylesheet" type="text/css">
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/cec5f9c18f.js" crossorigin="anonymous"></script>
+
+    <!--Favicon -->
+    <link rel="shortcut icon" href="~/images/favikon.ico">
+
+    <!-- Select2 css-->
+    <link href="~/plugins/select2/css/select2.min.css" rel="stylesheet">
+
+    <!-- Mutipleselect css-->
+    @*<link rel="stylesheet" href="~/plugins/multipleselect/multiple-select.css">*@
+
+
+
+    @*Kendo*@
+    <link rel="stylesheet" href="~/css/UBO_Theme.css" />
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <script src="~/kendo/js/kendo.all.min.js"></script>
+    <script src="~/kendo/js/kendo.aspnetmvc.min.js"></script>
+    <script src="~/kendo/js/cultures/kendo.culture.en-US.min.js"></script>
+    <script>kendo.culture("en-US");</script>
+    <script src="https://use.fontawesome.com/a56aad73f2.js"></script>
+    <link rel="stylesheet" href="https://maxst.icons8.com/vue-static/landings/line-awesome/line-awesome/1.3.0/css/line-awesome.min.css">
+
+
+    <style>
+        @@media screen and (max-width: 990px) {
+            #navbarSupportedContent {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body data-layout="horizontal" data-topbar="dark">
+   <div id="layout-wrapper">
+
+     <!-- Left Sidebar End -->
+    <header class="ishorizontal-topbar">
+        <div class="navbar-header">
+                <div class="d-flex">
+                    <!-- LOGO -->
+                    <div class="navbar-brand-box">
+                        <a href="@Url.Action("Index","Home")" class="logo">
+                            <span class="logo-sm">
+                                <img src="~/images/favikon.ico" alt="" height="42">
+                            </span>
+                        </a>
+                    </div>
+
+                    <button type="button" class="btn btn-sm px-3 font-size-16 d-lg-none header-item" data-bs-toggle="collapse" data-bs-target="#topnav-menu-content">
+                        <i class="fa fa-fw fa-bars"></i>
+                    </button>
+
+                    <div class="d-none d-sm-block ms-2 align-self-center">
+                        <h4 class="page-title">Movie Streaming</h4>
+                    </div>
+
+                </div>
+
+                <div class="d-flex">
+                <div class="dropdown d-inline-block">
+                        <div class="btn header-item user text-start d-flex align-items-center">
+                            <a class="nav-link text-light" asp-area="" asp-controller="Account" asp-action="SignOut"><i class="mdi mdi-logout text-muted font-size-16 align-middle me-1"></i>SignOut</a>
+                        </div>
+                    </div>
+                </div>
+        </div>
+            <div class="topnav">
+                <div class="container-fluid">
+                    <nav class="navbar navbar-light navbar-expand-lg topnav-menu">
+
+                    <div class="collapse navbar-collapse" id="topnav-menu-content">
+                        <ul class="navbar-nav " id="nav-links">
+                                <li class="nav-item @(ViewBag.M==true?"active":"")">
+                                     <a class="nav-link @(ViewBag.M==true?"active":"")" asp-area="" asp-controller="Movie" asp-action="Index">
+                                         <i class="icon nav-icon" style="@(ViewBag.M==true?"fill:#3b76e1;":"")" data-eva="film"></i>Movie
+                                     </a>
+                                </li>
+                                <li class="nav-item  @(ViewBag.R==true?"active":"")">
+                                    <a class="nav-link @(ViewBag.R==true?"active":"")" asp-area="" asp-controller="Role" asp-action="Index">
+                                        <i class="icon nav-icon" style="@(ViewBag.R==true?"fill:#3b76e1;":"")" data-eva="person-done"></i>Role
+                                    </a>
+                                </li>
+                                <li class="nav-item @(ViewBag.U==true?"active":"")">
+                                    <a class="nav-link @(ViewBag.U==true?"active":"")" asp-area="" asp-controller="User" asp-action="Index">
+                                        <i class="icon nav-icon" style="@(ViewBag.U==true?"fill:#3b76e1;":"")" data-eva="person"></i>User
+                                    </a>
+                                </li>
+                                @*<li class="nav-item">
+                                    <a class="nav-link" asp-area="" asp-controller="ViewAuthorization" asp-action="Index">
+                                        <i class="icon nav-icon" data-eva="unlock"></i>View Authorization
+                                    </a>
+                                </li>*@
+                                <li class="nav-item @(ViewBag.C==true?"active":"")">
+                                    <a class="nav-link @(ViewBag.C==true?"active":"")" asp-area="" asp-controller="Complaint" asp-action="Index">
+                                        <i class="icon nav-icon" style="@(ViewBag.C==true?"fill:#3b76e1;":"")" data-eva="email"></i>Complaints
+                                    </a>
+                                </li>
+                        </ul>
+                    </div>
+                    </nav>
+                </div>
+            </div>
+    </header>
+
+        <div class="main-content">
+            <div class="page-content">
+                <div class="container">
+                    <main role="main" class="pb-3">
+                        @RenderBody()
+                    </main>
+                </div>
+            </div>
+
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <script>document.write(new Date().getFullYear())</script> &copy; - MovieStreaming - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
+        </div>
+   </div>
+    <!-- END layout-wrapper -->
+    <script>
+        //LANGUAGE HELPER
+        function changeLanguageIndex(language) {
+
+
+            return $.ajax({
+                url: "@Url.Action("ChangeLanguage", "Account")",
+                type: "POST",
+                data: { Value: language },
+                contentType: "application/x-www-form-urlencoded",
+                cache: false,
+                statusCode: {
+                    401: function () {
+                        Redirect(urlLogin);
+                    }
+                },
+                complete: function () {
+                    location.reload()
+                },
+                error: function () {
+                }
+            });
+
+        }
+        //console.log("@*requests*@");
+
+        // LANGUAGE CHANGER DROPDOWN
+        function downDrop() {
+
+            var x = document.getElementById("p2").getAttribute("aria-expanded");
+            if (x == "true") {
+                document.getElementById("p2").setAttribute("aria-expanded", "false");
+                document.getElementById("g6").setAttribute("class", "dropdown d-inline-block language-switch");
+            } else {
+                document.getElementById("p2").setAttribute("aria-expanded", "true");
+                document.getElementById("g6").setAttribute("class", "dropdown d-inline-block language-switch show");
+            }
+
+        }
+
+        //MAKING DROPDOWN CLICKABLE ON MOBILE
+        var viewPort = $(window).width();
+
+        if (viewPort <= 760) {
+            $("a[role|='button']").on("click", function () {
+                var clickedId = $(this).attr('id');
+                $(`div[aria-labelledby|='${clickedId}']`).attr("class", "dropdown-menu show");
+            });
+        }
+
+    </script>
+
+    @*<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>*@
+    <script src="https://use.fontawesome.com/a56aad73f2.js"></script>
+
+    <script src="~/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/libs/metismenujs/metismenujs.min.js"></script>
+    <script src="~/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/libs/eva-icons/eva.min.js"></script>
+    <script src="https://use.fontawesome.com/a56aad73f2.js"></script>
+
+    <!-- Select2 js-->
+    <script src="~/plugins/select2/js/select2.min.js"></script>
+
+    <!-- apexcharts -->
+    <script src="~/libs/apexcharts/apexcharts.min.js"></script>
+
+    <script src="~/js/pages/dashboard.init.js"></script>
+
+    <script src="~/js/app.js"></script>
+
+</body>
+
+</html>
+
+
+<style>
+    @@media (min-width: 1200px) {
+        .container, .container-lg, .container-md, .container-sm, .container-xl, .container-xxl {
+            max-width: 1638px;
+        }
+    }
+
+    .footer {
+        display: block;
+    }
+
+    .avatar {
+        font-weight: bold;
+        font-size: 16px;
+    }
+
+    .logo .logo-sm {
+        display: block;
+    }
+
+    .table-responsive {
+        overflow-x: hidden;
+    }
+
+    .layout-wrapper, .body {
+        display: table;
+    }
+
+    .main-content {
+        display: block;
+        justify-content: center;
+    }
+    /*Style for inputs and dropdowns */
+
+    .k-grid-edit-row > td > .k-widget {
+        background-color: rgba(0, 0, 0, 0);
+        border: none;
+    }
+
+    .k-state-disabled > .k-dropdown .k-dropdown-wrap, .k-state-disabled > .k-dropdowntree .k-dropdown-wrap, .k-dropdown .k-dropdown-wrap.k-state-disabled, .k-dropdowntree .k-dropdown-wrap.k-state-disabled {
+        border-bottom-style: none;
+    }
+
+    .k-dropdown {
+        width: 100%;
+        border-width: 0;
+        outline: 0;
+        background: none;
+        box-sizing: border-box;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+        font-size: .875rem;
+        line-height: 1.125;
+        text-align: left;
+        white-space: nowrap;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        vertical-align: middle;
+        position: relative;
+        /*        border: 1px solid #e2e5e8;
+            */ border-radius: 0.75rem;
+        -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: rgba(68,84,105,0);
+    }
+
+
+    .k-textarea {
+        width: 100%;
+        border-width: 0;
+        outline: 0;
+        background: none;
+        box-sizing: border-box;
+        font-family: Roboto, "Helvetica Neue", sans-serif;
+        font-size: .875rem;
+        line-height: 1.125;
+        text-align: left;
+        white-space: nowrap;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+        vertical-align: middle;
+        position: relative;
+        /*        border: 1px solid #e2e5e8;
+                */ border-radius: 0.75rem;
+        -webkit-touch-callout: none;
+        -webkit-tap-highlight-color: rgba(68,84,105,0);
+    }
+
+
+    .k-grid-edit-row .k-dropdown .k-dropdown-wrap .k-input {
+        height: 40px;
+    }
+
+    .k-list .k-item:hover.k-state-selected,
+    .k-list .k-item.k-state-hover.k-state-selected,
+    .k-list-optionlabel:hover.k-state-selected,
+    .k-list-optionlabel.k-state-hover.k-state-selected {
+        color: #3b76e1;
+        background-color: #f1f4fb;
+    }
+
+    .k-list .k-item.k-state-selected,
+    .k-list-optionlabel.k-state-selected {
+        color: #3b76e1;
+        background-color: white;
+    }
+
+    .k-popup {
+        border-radius: 0.75rem;
+        font-size: .875rem;
+    }
+
+    .k-textarea:focus, .k-textarea.k-state-focus, .k-textarea.k-state-focused {
+        color: #f1f4fb;
+        box-shadow: none;
+    }
+
+    .k-textarea:focus-within {
+        color: #f1f4fb;
+        box-shadow: none;
+    }
+
+
+    .k-checkbox:checked, .k-checkbox:checked:focus,
+    .k-checkbox.k-checked, .k-checkbox.k-checked.k-state-focus {
+        background-color: #3b76e1;
+        border-color: #3b76e1;
+        box-shadow: none;
+    }
+
+    :focus-visible {
+        outline: none;
+    }
+
+    .k-dropdown .k-dropdown-wrap .k-select {
+        margin-left: -30px;
+    }
+
+    .k-input {
+        width: 100%;
+        padding: 0.47rem 0.75rem;
+        font-size: .875rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #545965;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #e2e5e8;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border-radius: 0.75rem;
+    }
+</style>

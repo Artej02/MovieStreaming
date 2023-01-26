@@ -1,0 +1,125 @@
+﻿@using Kendo.Mvc.UI
+@using MovieStreaming.Custom.Models
+<script src="~/kendo/js/jszip.min.js"></script>
+<script>
+
+    function sync_handler(e) {
+        e.sender.read();
+    }
+
+    function viewDetails(e) {
+        window.location.href = '@Url.Action("Details","Movie")' + "/" + this.dataItem(jQuery(e.currentTarget).closest("tr")).Id;
+    }
+
+</script>
+<style>
+    .k-grid-header {
+        background-color: #f5f6f8;
+    }
+
+    .k-toolbar .k-button {
+        color: #000;
+        background-color: #f5f6f8;
+        border-color: #f5f6f8;
+    }
+
+    .k-pager-numbers .k-link.k-state-selected {
+        color: white;
+        background-color: #7f838b;
+    }
+
+    .k-pager-numbers .k-link {
+        color: #7f838b;
+    }
+
+    .k-command-cell .k-grid-update {
+        color: #3b76e1;
+        background-color: rgba(88,143,209,.23) !important;
+    }
+
+    .k-command-cell .k-grid-cancel {
+        color: #000;
+        background-color: #f5f6f8;
+        border-color: #f5f6f8;
+    }
+
+    .k-command-cell .k-grid-edit {
+        color: #63ad6f;
+        background-color: rgba(99,173,111,.1);
+    }
+
+    .k-command-cell .k-grid-delete {
+        color: #f56e6e;
+        background-color: rgba(245,110,110,.1);
+    }
+</style>
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex align-items-start">
+                        <div class="flex-grow-1">
+                            <h4>Movies</h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        @(Html.Kendo().Grid<MovieStreaming.Custom.Models.Movie.Movie>()
+                            .Name("gridMovies")
+                            .Columns(columns =>
+                            {
+                                columns.Bound(p => p.Id).Hidden(true);
+                                columns.Bound(p => p.Title).Title("Title").Width(150);
+                                columns.Bound(p => p.Description).Title("Description").Width(150);
+                                columns.Bound(p => p.Video).Title("Video").Width(150);
+                                columns.Bound(p => p.Cost).Title("Cost").Width(150);
+
+                                columns.Command(command =>
+                                {
+                                    command.Edit().Text("Edit").UpdateText("Save").CancelText("Cancel");
+                                    command.Destroy().Text("Delete");
+                                    command.Custom("Details").Click("viewDetails");
+                                })
+                                .Width(100);
+
+                            })
+                            .ToolBar(tools =>
+                            {
+                                tools.Create().Text("Add").HtmlAttributes(new { style = "color:#fff;background-color: #3b76e1;border-color: #3b76e1;" });
+                                tools.Excel().Text("Export");
+                            })
+                            .Editable(editable => editable.Mode(GridEditMode.InLine))
+                            .Excel(excel => excel
+                            .FileName("Movies.xlsx")
+                            .Filterable(true)
+                            .AllPages(true)
+                            .ProxyURL(Url.Action("ExportToFile", "Home")))
+                            .Pageable(pager => pager.Refresh(true).PageSizes(new[] { 10, 20, 30 }).Refresh(true))
+                            .Sortable()
+                            .Scrollable()
+                            .Filterable()
+                            .Resizable(resize => resize.Columns(true))
+                            .HtmlAttributes(new { style = "height:700px;border-style: none;" })
+                            .DataSource(dataSource => dataSource
+                            .Ajax()
+                            .Events(e => e.Sync("sync_handler"))
+                            .PageSize(20)
+                            .Model(model =>
+                            {
+                                model.Id(p => p.Id);
+
+                            })
+                            .Read(read => read.Action("Read_Movies", "Movie"))
+                            .Update(update => update.Action("Update_Movies", "Movie"))
+                            .Create(create => create.Action("Create_Movies", "Movie"))
+                            .Destroy(delete => delete.Action("Delete_Movies", "Movie"))
+                            )
+                            )
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

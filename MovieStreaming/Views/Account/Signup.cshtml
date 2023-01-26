@@ -1,0 +1,263 @@
+﻿@model MovieStreaming.Custom.Models.User.Register
+
+@{
+
+    Layout = null;
+}
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] Movie Streaming</title>
+    <link rel="shortcut icon" href="~/images/favikon.ico">
+    <link href="~/css/bootstrap.min.css" id="bootstrap-style" rel="stylesheet" type="text/css">
+    <link href="~/css/icons.min.css" rel="stylesheet" type="text/css">
+    <link href="~/css/app.min.css" id="app-style" rel="stylesheet" type="text/css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.2.0.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jquery.validation.unobtrusive/3.2.6/jquery.validate.unobtrusive.min.js"></script>
+</head>
+<body>
+    <div class="auth-page">
+        <div class="container-fluid p-0">
+            <div class="row g-0 align-items-center">
+                <div class="col-xxl-4 col-lg-4 col-md-6">
+                    <div class="row justify-content-center g-0">
+                        <div class="col-xl-9">
+                            <div class="p-4">
+                                <div class="card mb-0">
+                                    <div class="card-body">
+                                        <div class="auth-full-page-content rounded d-flex p-3 my-2">
+                                            <div class="w-100">
+                                                <div class="d-flex flex-column h-100">
+                                                    <div class="mb-4 mb-md-5">
+                                                        <a href="index.html" class="d-block auth-logo">
+                                                            @*<div>  Logo  </div>*@
+                                                        </a>
+                                                    </div>
+                                                    <div class="auth-content my-auto">
+                                                        <div class="text-center">
+                                                            <h5 class="mb-0">Register</h5>
+                                                            <p class="text-muted mt-2">Sign up to continue to your Movies.</p>
+                                                        </div>
+                                                        <form class="mt-4 pt-2" id="SignUpInForm" method="post">
+                                                            <div class="form-floating form-floating-custom mb-4">
+                                                                <input asp-for="Name" type="text" class="form-control" id="input-name" placeholder="Enter Name">
+                                                                <span asp-validation-for="Name" class="text-danger"></span>
+                                                                <div class="invalid-feedback">
+                                                                    Please Enter Name
+                                                                </div>
+                                                                <label for="input-name">Name</label>
+                                                                <div class="form-floating-icon">
+                                                                    <i data-eva="name-outline"></i>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-floating form-floating-custom mb-4">
+                                                                <input asp-for="Surname" type="text" class="form-control" id="input-surname" placeholder="Enter Surname">
+                                                                <span asp-validation-for="Surname" class="text-danger"></span>
+                                                                <div class="invalid-feedback">
+                                                                    Please Enter Surname
+                                                                </div>
+                                                                <label for="input-surname">Surname</label>
+                                                                <div class="form-floating-icon">
+                                                                    <i data-eva="surname-outline"></i>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-floating form-floating-custom mb-4">
+                                                                <input asp-for="Username" type="text" class="form-control username" id="input-email" placeholder="Enter Email">
+                                                                <span asp-validation-for="Username" class="text-danger"></span>
+                                                                <div class="invalid-feedback">
+                                                                    Please Enter Email
+                                                                </div>
+                                                                <label for="input-email">Email</label>
+                                                                <div class="form-floating-icon">
+                                                                    <i data-eva="email-outline"></i>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-floating form-floating-custom mb-4 auth-pass-inputgroup">
+                                                                <input asp-for="Password" type="password" class="form-control pe-5" id="password-input" placeholder="Enter Password">
+                                                                <span asp-validation-for="Password" class="text-danger"></span>
+                                                                <button type="button" class="btn btn-link position-absolute h-100 end-0 top-0" id="password-addon">
+                                                                    <i class="mdi mdi-eye-outline font-size-18 text-muted"></i>
+                                                                </button>
+                                                                <label for="input-password">Password</label>
+                                                                <div class="form-floating-icon">
+                                                                    <i data-eva="lock-outline"></i>
+                                                                </div>
+                                                            </div>
+
+                                                            @Html.ValidationSummary(true)
+
+                                                            <div class="mb-3">
+                                                                <button class="btn btn-primary w-100 waves-effect waves-light" type="submit">Register</button>
+                                                            </div>
+                                                        </form>
+
+
+                                                        <div class="mt-4 pt-3 text-center">
+                                                            <div class="signin-other-title">
+                                                                <h5 class="font-size-14 mb-4 text-muted fw-medium">- Or you can join with -</h5>
+                                                            </div>
+
+                                                            <div class="d-flex gap-2">
+                                                                <a type="button" class="btn btn-soft-primary waves-effect waves-light w-100 " href="@Url.Action("Facebook","Account")">
+                                                                    <i class="bx bxl-facebook font-size-16 align-middle"></i>
+                                                                </a>
+                                                            </div>
+                                                        </div>
+                                                        <div class="mt-4 pt-3 text-center">
+                                                            <p class="text-muted mb-0">
+                                                                Already have an account ? <a href="@Url.Action("Login","Account")"
+                                                                                             class="text-primary fw-semibold"> Log in here </a>
+                                                            </p>
+                                                            <p class="text-muted mb-0">
+                                                                Forgot your password ? <a href="@Url.Action("ForgotPassword","ResetPassword")"
+                                                                                          class="text-primary fw-semibold">Click here </a>
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end auth full page content -->
+                </div>
+                <!-- end col -->
+                <div class="col-xxl-8 col-lg-8 col-md-6">
+                    <div class="auth-bg bg-white py-md-5 p-4 d-flex">
+                        <div class="bg-overlay bg-white"></div>
+                        <!-- end bubble effect -->
+                        <div class="row justify-content-center align-items-center">
+                            <div class="col-xl-8">
+                                <div class="mt-4">
+                                    <img src="~/images/login-img.png" class="img-fluid" alt="">
+                                </div>
+                                <div class="p-0 p-sm-4 px-xl-0 py-5">
+                                    <div id="reviewcarouselIndicators" class="carousel slide auth-carousel" data-bs-ride="carousel">
+                                        <div class="carousel-indicators carousel-indicators-rounded">
+                                            <button type="button" data-bs-target="#reviewcarouselIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                            <button type="button" data-bs-target="#reviewcarouselIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                            <button type="button" data-bs-target="#reviewcarouselIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                                        </div>
+
+                                        <!-- end carouselIndicators -->
+                                        <div class="carousel-inner w-75 mx-auto">
+                                            <div class="carousel-item active">
+                                                <div class="testi-contain text-center">
+                                                    <h5 class="font-size-20 mt-4">
+                                                        “Placeholder 1”
+                                                    </h5>
+                                                    <p class="font-size-15 text-muted mt-3 mb-0">
+                                                        Placeholder 2.
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="carousel-item">
+                                                <div class="testi-contain text-center">
+                                                    <h5 class="font-size-20 mt-4">
+                                                        “Placeholder 3”
+                                                    </h5>
+                                                    <p class="font-size-15 text-muted mt-3 mb-0">
+                                                        Placeholder 4.
+                                                    </p>
+                                                </div>
+                                            </div>
+
+                                            <div class="carousel-item">
+                                                <div class="testi-contain text-center">
+                                                    <h5 class="font-size-20 mt-4">
+                                                        “Placeholder 5”
+                                                    </h5>
+                                                    <p class="font-size-15 text-muted mt-3 mb-0">
+                                                        Placeholder 6
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- end carousel-inner -->
+                                    </div>
+                                    <!-- end review carousel -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- end col -->
+            </div>
+            <!-- end row -->
+        </div>
+        <!-- end container fluid -->
+    </div>
+
+
+
+    <script src="~/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="~/libs/metismenujs/metismenujs.min.js"></script>
+    <script src="~/libs/simplebar/simplebar.min.js"></script>
+    <script src="~/libs/eva-icons/eva.min.js"></script>
+    <script src="~/js/pages/pass-addon.init.js"></script>
+    <script src="~/js/pages/eva-icon.init.js"></script>
+    <script src="~/js/form-validation.js"></script>
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <script src="~/js/custom.js"></script>
+
+
+
+    <script>
+        $(document).ready(function () {
+            $(document).on('submit', "#SignUpInForm", function (e) {
+
+                var form = $(this);
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Action("SignUp", "Account")",
+                    data: form.serialize(), // serializes the form's elements.
+                    success: function (data) {
+                        console.log(data)
+                        if (data.IsSuccessful) {
+                            $('.form-control').val('');
+                            $('select').find('option:not(:first)').remove();
+                            swal(
+                                {
+                                    title: 'The request has been completed successfully!',
+                                    text: 'Your request is done! We will notify you when it is approved...',
+                                    type: 'success',
+                                    confirmButtonColor: '#3b76e1'
+                                }
+                            )
+                        }
+                        else if (data.EmailExists) {
+                            $('.username').val('');
+                            swal(
+                                {
+                                    title: 'This email exists!',
+                                    text: 'This email exists.Try another...',
+                                    type: 'info',
+                                    confirmButtonColor: '#57a94f'
+                                }
+                            )
+                        }
+
+                    }
+                });
+                e.preventDefault();
+            });
+        }
+        )
+    </script>
+
+</body>
+</html>
+
