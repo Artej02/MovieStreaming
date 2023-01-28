@@ -81,7 +81,7 @@ namespace MovieStreaming.Controllers
                 }
                 else
                 {
-                    return Json(_context.Roles.ToList());
+                    return Json(_context.Movies.ToList());
                 }
             }
             catch (Exception ex)
@@ -97,7 +97,7 @@ namespace MovieStreaming.Controllers
                 Movie movie = _context.Movies.Find(mov.Id);
                 if (movie == null)
                 {
-                    return Json("Role Not Found!");
+                    return Json("Movie Not Found!");
                 }
 
                 _context.Movies.Remove(movie);
