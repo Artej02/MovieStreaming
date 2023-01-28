@@ -109,6 +109,11 @@
                                         <i class="icon nav-icon" style="@(ViewBag.C==true?"fill:#3b76e1;":"")" data-eva="email"></i>Complaints
                                     </a>
                                 </li>
+                                <li class="nav-item @(ViewBag.C==true?"active":"")">
+                                    <a class="nav-link @(ViewBag.C==true?"active":"")" asp-area="" asp-controller="Complaint" asp-action="Index">
+                                        <i class="icon nav-icon" style="@(ViewBag.C==true?"fill:#3b76e1;":"")" data-eva="email"></i>Complaints
+                                    </a>
+                                </li>
                         </ul>
                     </div>
                     </nav>
