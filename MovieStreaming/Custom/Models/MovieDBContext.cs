@@ -15,6 +15,7 @@ namespace MovieStreaming.Custom.Models
         public virtual DbSet<Role.Role> Roles { get; set; }
         public virtual DbSet<Movie.Movie> Movies { get; set; }
         public virtual DbSet<Complaint.Complaint> Complaints { get; set; }
+        public virtual DbSet<ChangeLogs.ChangeLog> Logs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
