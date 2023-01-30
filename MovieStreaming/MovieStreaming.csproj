@@ -34,7 +34,6 @@
 
   <ItemGroup>
     <Folder Include="Custom\Helpers\" />
-    <Folder Include="Custom\Models\ChangeLogs\" />
     <Folder Include="Views\ChangeLogs\" />
   </ItemGroup>
 
