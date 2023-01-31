@@ -30,11 +30,6 @@
         AgjensiaEPunesimit = 8
 
     }
-    public enum QuestionCriteria
-    {
-        Question_should_match_all_of_these_criteria = 1,
-        Question_should_not_match_any_of_these_criteria = 2,
-    }
     public enum QuestionAnswer
     {
         Equal = 1,
@@ -69,7 +64,7 @@
         Audio = 19,
         Single_Select_Image = 20,
         Multiple_Select_Image = 21,
-        Image_Rating  =22
+        Image_Rating  = 22
     }
 
     public enum EnumIntOrString
@@ -140,13 +135,6 @@
         Date = 7,
         Time = 8
 
-    }
-
-    public enum Shuffle
-    {
-        Shuffle_but_keep_last_one_fixed = 1,
-        Shuffle_but_keep_last_two_fixed = 2,
-        Shuffle_but_keep_last_three_fixed = 3
     }
 
 }

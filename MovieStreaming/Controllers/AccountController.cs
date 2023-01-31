@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MovieStreaming.Custom.Helpers;
 using MovieStreaming.Custom.DatabaseHelpers;
 using MovieStreaming.Custom.Models.User;
+using MovieStreaming.Custom.Models.Configuration;
 using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -38,9 +39,6 @@ namespace MovieStreaming.Controllers
                 }
                 else
                 {
-                    if (user.Result.RoleId == 39)
-
-                    {
                         if (user.HasData && PasswordHelper.Verify(user.Result.Salt, user.Result.Password, login.Password))
                         {
                             if (user.Result.IsApproved == null)
@@ -64,12 +62,6 @@ namespace MovieStreaming.Controllers
 
                             return Json(new { IsSuccessful = false, FailedValidation = false, IncorrectCredenials = true, WaitingConfirmation = false, IsApproved = false });
                         }
-                    }
-                    else
-                    {
-                        return Json(new { IsSuccessful = false, FailedValidation = false, IncorrectCredenials = false, WaitingConfirmation = false, IsApproved = false, IsPanelists = true });
-
-                    }
                 }
             }
             else
