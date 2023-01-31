@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MovieStreaming.Custom.Helpers;
+using MovieStreaming.Custom.DatabaseHelpers;
 using MovieStreaming.Custom.Models.User;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Authentication.Cookies;

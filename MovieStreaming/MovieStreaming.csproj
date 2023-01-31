@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Dapper" Version="2.0.123" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.17" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="5.0.17" />
@@ -30,10 +31,6 @@
     <PackageReference Include="Telerik.Web.PDF" Version="2021.2.616" />
     <PackageReference Include="Telerik.Web.Spreadsheet" Version="2021.2.616" />
     <PackageReference Include="Telerik.Zip" Version="2021.2.614" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Custom\Helpers\" />
   </ItemGroup>
 
 </Project>
