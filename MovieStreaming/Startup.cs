@@ -85,6 +85,16 @@ namespace MovieStreaming
 
             app.UseEndpoints(endpoints =>
             {
+                endpoints.MapAreaControllerRoute(
+                    name: "adminArea",
+                    areaName: "Admin",
+                    pattern: "Admin/{controller=Account}/{action=Login}/{id?}");
+
+                endpoints.MapAreaControllerRoute(
+                    name: "userArea",
+                    areaName: "User",
+                    pattern: "User/{controller=Account}/{action=Login}/{id?}");
+
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Account}/{action=Login}/{id?}");
