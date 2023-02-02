@@ -1,6 +1,11 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using MovieStreaming.Areas.Admin.Models.ChangeLogs;
+using MovieStreaming.Areas.Admin.Models.Complaint;
+using MovieStreaming.Areas.Admin.Models.Movie;
+using MovieStreaming.Areas.Admin.Models.Role;
+using MovieStreaming.Custom.Models.User;
 
 namespace MovieStreaming.Custom.Models
 {
@@ -12,10 +17,10 @@ namespace MovieStreaming.Custom.Models
         public MovieDBContext(DbContextOptions<MovieDBContext> dbContextOptions) : base(dbContextOptions) { }
 
         public virtual DbSet<User.User> Users { get; set; }
-        public virtual DbSet<Role.Role> Roles { get; set; }
-        public virtual DbSet<Movie.Movie> Movies { get; set; }
-        public virtual DbSet<Complaint.Complaint> Complaints { get; set; }
-        public virtual DbSet<ChangeLogs.ChangeLog> Logs { get; set; }
+        public virtual DbSet<Role> Roles { get; set; }
+        public virtual DbSet<Movie> Movies { get; set; }
+        public virtual DbSet<Complaint> Complaints { get; set; }
+        public virtual DbSet<ChangeLog> Logs { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -25,7 +30,7 @@ namespace MovieStreaming.Custom.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-            modelBuilder.Entity<Role.Role>(entity =>
+            modelBuilder.Entity<Role>(entity =>
             {
 
                 entity.ToTable("Role");
@@ -41,14 +46,14 @@ namespace MovieStreaming.Custom.Models
                 entity.Property(e => e.Name).HasMaxLength(50);
             });
 
-            modelBuilder.Entity<Complaint.Complaint>(entity =>
+            modelBuilder.Entity<Complaint>(entity =>
             {
                 entity.ToTable("Complaint");
 
                 entity.Property(e => e.Title).HasMaxLength(50);
             });
 
-            modelBuilder.Entity<Movie.Movie>(entity =>
+            modelBuilder.Entity<Movie>(entity =>
             {
                 entity.ToTable("Movie");
 

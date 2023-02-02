@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
-using MovieStreaming.Custom.Models.User;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,6 +10,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using MovieStreaming.Custom.DatabaseHelpers;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using MovieStreaming.Custom.Models.User;
 
 namespace MovieStreaming.Custom.Helpers
 {

@@ -6,37 +6,36 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieStreaming.Custom.Models;
-using MovieStreaming.Custom.Models.Movie;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
 using MovieStreaming.Custom.DatabaseHelpers;
 using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
-using MovieStreaming.Custom.Models.ChangeLogs;
+using MovieStreaming.Areas.Admin.Models.Movie;
 
-namespace MovieStreaming.Controllers
+namespace MovieStreaming.Areas.Admin.Controllers
 {
-    public class LogsController : Controller
+    public class MovieController : Controller
     {
         private MovieDBContext _context = new MovieDBContext();
 
-        public LogsController(MovieDBContext context)
+        public MovieController(MovieDBContext context)
         {
             _context = context;
         }
 
         public ActionResult Index()
         {
-            ViewBag.C = true;
+            ViewBag.M = true;
             return View();
         }
 
-        public ActionResult Read_Logs([DataSourceRequest] DataSourceRequest request)
+        public ActionResult Read_Movies([DataSourceRequest] DataSourceRequest request)
         {
             try
             {
-                var logs = _context.Logs.ToList();
+                var movie = _context.Movies.ToList();
 
-                return Json(logs.ToDataSourceResult(request));
+                return Json(movie.ToDataSourceResult(request));
             }
             catch (Exception ex)
             {
@@ -45,22 +44,22 @@ namespace MovieStreaming.Controllers
 
         }
 
-        public ActionResult Create_Logs([DataSourceRequest] DataSourceRequest request, ChangeLog log)
+        public ActionResult Create_Movies([DataSourceRequest] DataSourceRequest request, Movie mov)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
 
-                    _context.Logs.Add(log);
+                    _context.Movies.Add(mov);
                     _context.SaveChanges();
-                    var _loglist = _context.Logs.ToList();
-                    return Json(new[] { log }.ToDataSourceResult(request, ModelState));
+                    var _movlist = _context.Movies.ToList();
+                    return Json(new[] { mov }.ToDataSourceResult(request, ModelState));
                 }
 
                 else
                 {
-                    return Json(_context.Logs.ToList());
+                    return Json(_context.Movies.ToList());
                 }
             }
             catch (Exception ex)
@@ -69,20 +68,20 @@ namespace MovieStreaming.Controllers
             }
         }
 
-        public ActionResult Update_Logs([DataSourceRequest] DataSourceRequest request, ChangeLog log)
+        public ActionResult Update_Movies([DataSourceRequest] DataSourceRequest request, Movie mov)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    _context.Entry(log).State = EntityState.Modified;
+                    _context.Entry(mov).State = EntityState.Modified;
                     _context.SaveChanges();
-                    return Json(new[] { log }.ToDataSourceResult(request, ModelState));
+                    return Json(new[] { mov }.ToDataSourceResult(request, ModelState));
 
                 }
                 else
                 {
-                    return Json(_context.Logs.ToList());
+                    return Json(_context.Movies.ToList());
                 }
             }
             catch (Exception ex)
@@ -91,19 +90,19 @@ namespace MovieStreaming.Controllers
             }
         }
 
-        public ActionResult Delete_Logs([DataSourceRequest] DataSourceRequest request, ChangeLog log)
+        public ActionResult Delete_Movies([DataSourceRequest] DataSourceRequest request, Movie mov)
         {
             try
             {
-                ChangeLog logs = _context.Logs.Find(log.Id);
-                if (logs == null)
+                Movie movie = _context.Movies.Find(mov.Id);
+                if (movie == null)
                 {
-                    return Json("Role Not Found!");
+                    return Json("Movie Not Found!");
                 }
 
-                _context.Logs.Remove(logs);
+                _context.Movies.Remove(movie);
                 _context.SaveChanges();
-                return Json(_context.Logs.ToList());
+                return Json(_context.Movies.ToList());
             }
             catch (Exception ex)
             {
@@ -111,11 +110,11 @@ namespace MovieStreaming.Controllers
             }
         }
 
-        public ActionResult Details(ChangeLog log)
+        public ActionResult Details(Movie mov)
         {
-            ChangeLog logs = _context.Logs.Find(log.Id);
+            Movie movie = _context.Movies.Find(mov.Id);
 
-            return View(logs);
+            return View(movie);
         }
     }
 }
