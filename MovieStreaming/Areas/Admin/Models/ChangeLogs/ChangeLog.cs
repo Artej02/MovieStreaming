@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MovieStreaming.Custom.Models.ChangeLogs
+namespace MovieStreaming.Areas.Admin.Models.ChangeLogs
 {
     public class ChangeLog
     {

@@ -33,4 +33,11 @@
     <PackageReference Include="Telerik.Zip" Version="2021.2.614" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Areas\Admin\Data\" />
+    <Folder Include="Areas\User\Controllers\" />
+    <Folder Include="Areas\User\Data\" />
+    <Folder Include="Areas\User\Models\" />
+  </ItemGroup>
+
 </Project>

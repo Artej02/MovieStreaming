@@ -6,36 +6,36 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieStreaming.Custom.Models;
-using MovieStreaming.Custom.Models.Complaint;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
 using MovieStreaming.Custom.DatabaseHelpers;
 using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
+using MovieStreaming.Areas.Admin.Models.Role;
 
-namespace MovieStreaming.Controllers
+namespace MovieStreaming.Areas.Admin.Controllers
 {
-    public class ComplaintContoller : Controller
+    public class RoleController : Controller
     {
         private MovieDBContext _context = new MovieDBContext();
 
-        public ComplaintContoller(MovieDBContext context)
+        public RoleController(MovieDBContext context)
         {
             _context = context;
         }
 
         public ActionResult Index()
         {
-            ViewBag.C = true;
+            ViewBag.R = true;
             return View();
         }
 
-        public ActionResult Read_Complaints([DataSourceRequest] DataSourceRequest request)
+        public ActionResult Read_Roles([DataSourceRequest] DataSourceRequest request)
         {
             try
             {
-                var complaint = _context.Complaints.ToList();
+                var role = _context.Roles.ToList();
 
-                return Json(complaint.ToDataSourceResult(request));
+                return Json(role.ToDataSourceResult(request));
             }
             catch (Exception ex)
             {
@@ -44,22 +44,22 @@ namespace MovieStreaming.Controllers
 
         }
 
-        public ActionResult Create_Complaints([DataSourceRequest] DataSourceRequest request, Complaint com)
+        public ActionResult Create_Roles([DataSourceRequest] DataSourceRequest request, Role rol)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
 
-                    _context.Complaints.Add(com);
+                    _context.Roles.Add(rol);
                     _context.SaveChanges();
-                    var _comlist = _context.Complaints.ToList();
-                    return Json(new[] { com }.ToDataSourceResult(request, ModelState));
+                    var _rollist = _context.Roles.ToList();
+                    return Json(new[] { rol }.ToDataSourceResult(request, ModelState));
                 }
 
                 else
                 {
-                    return Json(_context.Complaints.ToList());
+                    return Json(_context.Roles.ToList());
                 }
             }
             catch (Exception ex)
@@ -68,20 +68,20 @@ namespace MovieStreaming.Controllers
             }
         }
 
-        public ActionResult Update_Complaints([DataSourceRequest] DataSourceRequest request, Complaint com)
+        public ActionResult Update_Roles([DataSourceRequest] DataSourceRequest request, Role rol)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    _context.Entry(com).State = EntityState.Modified;
+                    _context.Entry(rol).State = EntityState.Modified;
                     _context.SaveChanges();
-                    return Json(new[] { com }.ToDataSourceResult(request, ModelState));
+                    return Json(new[] { rol }.ToDataSourceResult(request, ModelState));
 
                 }
                 else
                 {
-                    return Json(_context.Complaints.ToList());
+                    return Json(_context.Roles.ToList());
                 }
             }
             catch (Exception ex)
@@ -90,19 +90,19 @@ namespace MovieStreaming.Controllers
             }
         }
 
-        public ActionResult Delete_Complaints([DataSourceRequest] DataSourceRequest request, Complaint com)
+        public ActionResult Delete_Roles([DataSourceRequest] DataSourceRequest request, Role rol)
         {
             try
             {
-                Complaint complaint = _context.Complaints.Find(com.Id);
-                if (complaint == null)
+                Role role = _context.Roles.Find(rol.Id);
+                if (role == null)
                 {
-                    return Json("Complaint Not Found!");
+                    return Json("Role Not Found!");
                 }
 
-                _context.Complaints.Remove(complaint);
+                _context.Roles.Remove(role);
                 _context.SaveChanges();
-                return Json(_context.Complaints.ToList());
+                return Json(_context.Roles.ToList());
             }
             catch (Exception ex)
             {
@@ -110,11 +110,11 @@ namespace MovieStreaming.Controllers
             }
         }
 
-        public ActionResult Details(Complaint com)
+        public ActionResult Details(Role rol)
         {
-            Complaint complaint = _context.Complaints.Find(com.Id);
+            Role role = _context.Roles.Find(rol.Id);
 
-            return View(complaint);
+            return View(role);
         }
     }
 }

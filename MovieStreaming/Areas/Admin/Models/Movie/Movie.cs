@@ -1,4 +1,4 @@
-﻿namespace MovieStreaming.Custom.Models.Movie
+﻿namespace MovieStreaming.Areas.Admin.Models.Movie
 {
     public class Movie
     {

@@ -3,7 +3,7 @@ using Microsoft.Extensions.Logging;
 using MovieStreaming.Custom.Models;
 using System.Diagnostics;
 
-namespace MovieStreaming.Controllers
+namespace MovieStreaming.Areas.Admin.Controllers
 {
     public class HomeController : Controller
     {

@@ -1,5 +1,6 @@
 ﻿@using Kendo.Mvc.UI
-@using MovieStreaming.Custom.Models
+@using MovieStreaming.Areas.Admin.Models;
+@using MovieStreaming.Areas.Admin.Models.Role
 <script src="~/kendo/js/jszip.min.js"></script>
     <script>
 
@@ -66,7 +67,7 @@
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                        @(Html.Kendo().Grid<MovieStreaming.Custom.Models.Role.Role>()
+                        @(Html.Kendo().Grid<Role>()
                                     .Name("gridRoles")
                                     .Columns(columns =>
                                     {

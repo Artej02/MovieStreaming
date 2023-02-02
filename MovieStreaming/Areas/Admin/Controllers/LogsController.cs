@@ -6,36 +6,37 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieStreaming.Custom.Models;
-using MovieStreaming.Custom.Models.Role;
+using MovieStreaming.Areas.Admin.Models.Movie;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
 using MovieStreaming.Custom.DatabaseHelpers;
 using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
+using MovieStreaming.Areas.Admin.Models.ChangeLogs;
 
-namespace MovieStreaming.Controllers
+namespace MovieStreaming.Areas.Admin.Controllers
 {
-    public class RoleController : Controller
+    public class LogsController : Controller
     {
         private MovieDBContext _context = new MovieDBContext();
 
-        public RoleController(MovieDBContext context)
+        public LogsController(MovieDBContext context)
         {
             _context = context;
         }
 
         public ActionResult Index()
         {
-            ViewBag.R = true;
+            ViewBag.CL = true;
             return View();
         }
 
-        public ActionResult Read_Roles([DataSourceRequest] DataSourceRequest request)
+        public ActionResult Read_Logs([DataSourceRequest] DataSourceRequest request)
         {
             try
             {
-                var role = _context.Roles.ToList();
+                var logs = _context.Logs.ToList();
 
-                return Json(role.ToDataSourceResult(request));
+                return Json(logs.ToDataSourceResult(request));
             }
             catch (Exception ex)
             {
@@ -44,22 +45,22 @@ namespace MovieStreaming.Controllers
 
         }
 
-        public ActionResult Create_Roles([DataSourceRequest] DataSourceRequest request, Role rol)
+        public ActionResult Create_Logs([DataSourceRequest] DataSourceRequest request, ChangeLog log)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
 
-                    _context.Roles.Add(rol);
+                    _context.Logs.Add(log);
                     _context.SaveChanges();
-                    var _rollist = _context.Roles.ToList();
-                    return Json(new[] { rol }.ToDataSourceResult(request, ModelState));
+                    var _loglist = _context.Logs.ToList();
+                    return Json(new[] { log }.ToDataSourceResult(request, ModelState));
                 }
 
                 else
                 {
-                    return Json(_context.Roles.ToList());
+                    return Json(_context.Logs.ToList());
                 }
             }
             catch (Exception ex)
@@ -68,20 +69,20 @@ namespace MovieStreaming.Controllers
             }
         }
 
-        public ActionResult Update_Roles([DataSourceRequest] DataSourceRequest request, Role rol)
+        public ActionResult Update_Logs([DataSourceRequest] DataSourceRequest request, ChangeLog log)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    _context.Entry(rol).State = EntityState.Modified;
+                    _context.Entry(log).State = EntityState.Modified;
                     _context.SaveChanges();
-                    return Json(new[] { rol }.ToDataSourceResult(request, ModelState));
+                    return Json(new[] { log }.ToDataSourceResult(request, ModelState));
 
                 }
                 else
                 {
-                    return Json(_context.Roles.ToList());
+                    return Json(_context.Logs.ToList());
                 }
             }
             catch (Exception ex)
@@ -90,19 +91,19 @@ namespace MovieStreaming.Controllers
             }
         }
 
-        public ActionResult Delete_Roles([DataSourceRequest] DataSourceRequest request, Role rol)
+        public ActionResult Delete_Logs([DataSourceRequest] DataSourceRequest request, ChangeLog log)
         {
             try
             {
-                Role role = _context.Roles.Find(rol.Id);
-                if (role == null)
+                ChangeLog logs = _context.Logs.Find(log.Id);
+                if (logs == null)
                 {
                     return Json("Role Not Found!");
                 }
 
-                _context.Roles.Remove(role);
+                _context.Logs.Remove(logs);
                 _context.SaveChanges();
-                return Json(_context.Roles.ToList());
+                return Json(_context.Logs.ToList());
             }
             catch (Exception ex)
             {
@@ -110,11 +111,11 @@ namespace MovieStreaming.Controllers
             }
         }
 
-        public ActionResult Details(Role rol)
+        public ActionResult Details(ChangeLog log)
         {
-            Role role = _context.Roles.Find(rol.Id);
+            ChangeLog logs = _context.Logs.Find(log.Id);
 
-            return View(role);
+            return View(logs);
         }
     }
 }

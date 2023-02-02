@@ -1,7 +1,6 @@
-﻿@{
-}
-@using Kendo.Mvc.UI
-@using MovieStreaming.Custom.Models
+﻿@using Kendo.Mvc.UI
+@using MovieStreaming.Areas.Admin.Models;
+@using MovieStreaming.Areas.Admin.Models.Movie
 <script src="~/kendo/js/jszip.min.js"></script>
 <script>
 
@@ -68,17 +67,15 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        @(Html.Kendo().Grid<MovieStreaming.Custom.Models.ChangeLogs.ChangeLog>()
-                            .Name("gridLogs")
+                        @(Html.Kendo().Grid<Movie>()
+                            .Name("gridMovies")
                             .Columns(columns =>
                             {
                                 columns.Bound(p => p.Id).Hidden(true);
-                                columns.Bound(p => p.EntryUserId).Title("Title").Width(150);
-                                columns.Bound(p => p.Before).Title("Description").Width(150);
-                                columns.Bound(p => p.After).Title("Video").Width(150);
-                                columns.Bound(p => p.TableId).Title("Cost").Width(150);
-                                columns.Bound(p => p.InsertDate).Title("Cost").Width(150);
-                                columns.Bound(p => p.ActionType).Title("Cost").Width(150);
+                                columns.Bound(p => p.Title).Title("Title").Width(150);
+                                columns.Bound(p => p.Description).Title("Description").Width(150);
+                                columns.Bound(p => p.Video).Title("Video").Width(150);
+                                columns.Bound(p => p.Cost).Title("Cost").Width(150);
 
                                 columns.Command(command =>
                                 {
@@ -115,10 +112,10 @@
                                 model.Id(p => p.Id);
 
                             })
-                            .Read(read => read.Action("Read_Logs", "Logs"))
-                            .Update(update => update.Action("Update_Logs", "Logs"))
-                            .Create(create => create.Action("Create_Logs", "Logs"))
-                            .Destroy(delete => delete.Action("Delete_Logs", "Logs"))
+                            .Read(read => read.Action("Read_Movies", "Movie"))
+                            .Update(update => update.Action("Update_Movies", "Movie"))
+                            .Create(create => create.Action("Create_Movies", "Movie"))
+                            .Destroy(delete => delete.Action("Delete_Movies", "Movie"))
                             )
                             )
                     </div>
