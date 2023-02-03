@@ -53,7 +53,7 @@
                 <div class="d-flex">
                     <!-- LOGO -->
                     <div class="navbar-brand-box">
-                        <a href="@Url.Action("Index","Home")" class="logo">
+                        <a href="@Url.Action("Index","Dashboard", new { area = "Users" })" class="logo">
                             <span class="logo-sm">
                                 <img src="~/images/favikon.ico" alt="" height="42">
                             </span>
@@ -84,34 +84,9 @@
 
                     <div class="collapse navbar-collapse" id="topnav-menu-content">
                         <ul class="navbar-nav " id="nav-links">
-                                <li class="nav-item @(ViewBag.M==true?"active":"")">
-                                     <a class="nav-link @(ViewBag.M==true?"active":"")" asp-area="" asp-controller="Movie" asp-action="Index">
-                                         <i class="icon nav-icon" style="@(ViewBag.M==true?"fill:#3b76e1;":"")" data-eva="film"></i>Movie
-                                     </a>
-                                </li>
-                                <li class="nav-item  @(ViewBag.R==true?"active":"")">
-                                    <a class="nav-link @(ViewBag.R==true?"active":"")" asp-area="" asp-controller="Role" asp-action="Index">
-                                        <i class="icon nav-icon" style="@(ViewBag.R==true?"fill:#3b76e1;":"")" data-eva="person-done"></i>Role
-                                    </a>
-                                </li>
-                                <li class="nav-item @(ViewBag.U==true?"active":"")">
-                                    <a class="nav-link @(ViewBag.U==true?"active":"")" asp-area="" asp-controller="User" asp-action="Index">
-                                        <i class="icon nav-icon" style="@(ViewBag.U==true?"fill:#3b76e1;":"")" data-eva="person"></i>User
-                                    </a>
-                                </li>
-                                @*<li class="nav-item">
-                                    <a class="nav-link" asp-area="" asp-controller="ViewAuthorization" asp-action="Index">
-                                        <i class="icon nav-icon" data-eva="unlock"></i>View Authorization
-                                    </a>
-                                </li>*@
-                                <li class="nav-item @(ViewBag.C==true?"active":"")">
-                                    <a class="nav-link @(ViewBag.C==true?"active":"")" asp-area="" asp-controller="Complaint" asp-action="Index">
-                                        <i class="icon nav-icon" style="@(ViewBag.C==true?"fill:#3b76e1;":"")" data-eva="email"></i>Complaints
-                                    </a>
-                                </li>
-                                <li class="nav-item @(ViewBag.CL==true?"active":"")">
-                                    <a class="nav-link @(ViewBag.CL==true?"active":"")" asp-area="" asp-controller="Logs" asp-action="Index">
-                                        <i class="icon nav-icon" style="@(ViewBag.CL==true?"fill:#3b76e1;":"")" data-eva="email"></i>Changelog
+                                <li class="nav-item @(ViewBag.D==true?"active":"")">
+                                    <a class="nav-link @(ViewBag.D==true?"active":"")" asp-area="Users" asp-controller="Dashboard" asp-action="Index">
+                                        <i class="icon nav-icon" style="@(ViewBag.D==true?"fill:#3b76e1;":"")" data-eva="home"></i>Dashboard
                                     </a>
                                 </li>
                         </ul>

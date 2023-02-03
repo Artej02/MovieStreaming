@@ -14,11 +14,11 @@ using MovieStreaming.Areas.Admin.Models.Complaint;
 
 namespace MovieStreaming.Areas.Admin.Controllers
 {
-    public class ComplaintContoller : Controller
+    public class ComplaintController : Controller
     {
         private MovieDBContext _context = new MovieDBContext();
 
-        public ComplaintContoller(MovieDBContext context)
+        public ComplaintController(MovieDBContext context)
         {
             _context = context;
         }

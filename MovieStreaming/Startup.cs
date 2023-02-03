@@ -92,8 +92,8 @@ namespace MovieStreaming
 
                 endpoints.MapAreaControllerRoute(
                     name: "userArea",
-                    areaName: "User",
-                    pattern: "User/{controller=Account}/{action=Login}/{id?}");
+                    areaName: "Users",
+                    pattern: "Users/{controller=Account}/{action=Login}/{id?}");
 
                 endpoints.MapControllerRoute(
                     name: "default",

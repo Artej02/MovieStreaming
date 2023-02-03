@@ -11,13 +11,13 @@ using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
 using MovieStreaming.Custom.DatabaseHelpers;
 using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
-using MovieStreaming.Custom.Models.Role;
+using MovieStreaming.Areas.Admin.Models.Role;
 
 namespace MovieStreaming.Controllers
 {
     public class UserController : Controller
     {
-        MovieDBContext _context = new MovieDBContext();
+        private MovieDBContext _context = new MovieDBContext();
 
         public UserController(MovieDBContext context)
         {
