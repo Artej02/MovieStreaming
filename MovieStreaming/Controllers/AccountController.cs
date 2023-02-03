@@ -2,12 +2,12 @@
 using Microsoft.AspNetCore.Mvc;
 using MovieStreaming.Custom.Helpers;
 using MovieStreaming.Custom.DatabaseHelpers;
-using MovieStreaming.Custom.Models.User;
 using MovieStreaming.Custom.Models.Configuration;
 using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using MovieStreaming.Custom.Models.User;
 
 namespace MovieStreaming.Controllers
 {
