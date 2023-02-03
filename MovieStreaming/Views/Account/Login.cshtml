@@ -199,7 +199,7 @@
                     success: function (data) {
                         console.log(data)
                         if (data.IsSuccessful) {
-                            top.location.href = '@Url.Action("Index", "Home")';
+                            top.location.href = '@Url.Action("Index", "Home", new { area = "Admin" })';
                         } else if (data.FailedValidation) {
                             $(".requestedField").css("display", "block");
                         } else if (data.IncorrectCredenials) {

@@ -16,6 +16,7 @@ namespace MovieStreaming.Areas.Admin.Controllers
 
         public IActionResult Index()
         {
+            ViewBag.H = true;
             return View();
         }
 
