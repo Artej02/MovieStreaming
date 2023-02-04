@@ -1,0 +1,134 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@using MovieStreaming.Custom.Models
+@using Kendo.Mvc.UI
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js" crossorigin="anonymous"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<div class="pt-4 card">
+    <div class="form-div mb-2">
+        <div class="row mt-3">
+            <div class="flex-grow-1">
+                <h4>New Ticket</h4>
+            </div>
+            <form id="ticketForm" class="k-form k-form-vertical" kendo-validator="true">
+                <ul class="k-form-group">
+                    <li class="k-form-field">
+                        <label>Type:</label>
+                        @(Html.Kendo().DropDownList()
+                            .Name("TypeId")
+                            .DataTextField("Text")
+                            .DataValueField("Value")
+                            .OptionLabel("Choose:")
+                            .Value("0")
+                            .Items(i =>
+                            {
+                                i.Add()
+                                .Text("Option1")
+                                .Value("1");
+                            })
+                            .HtmlAttributes(new { style = "width:100% !important; background:#fff; border-radius:5px;" })
+                            )
+                    </li>
+                    <li class="k-form-field">
+                        <label>Title:</label>
+                        @(Html.Kendo().TextBox()
+                            .Name("Title")
+                            .HtmlAttributes(new { required = "required", validationmessage = "Title is required!" })
+                            )
+                    </li>
+                    <li class="k-form-field">
+                        <label>Description:</label>
+                        @(Html.Kendo().TextBox()
+                            .Name("Description")
+                            .HtmlAttributes(new { required = "required", validationmessage = "Description is required!" })
+                            )
+                    </li>
+
+                    <li class="k-form-field">
+                        <label>Severity:</label>
+                        @(Html.Kendo().RadioGroup().Layout(RadioGroupLayout.Horizontal)
+                            .Name("SeverityId")
+                            .HtmlAttributes(new { validationmessage = "Please select a Severity!", required = "required" })
+                            .Items(i =>
+                            {
+                                i.Add().Label("Low").Value("1");
+                                i.Add().Label("Medium").Value("2");
+                                i.Add().Label("High").Value("3");
+                                i.Add().Label("Urgent").Value("4");
+                            })
+                            .Events(e => e.Select("onSelect"))
+                            )
+
+                    </li>
+                </ul>
+                <div class="mt-5 mb-4">
+                    @(Html.Kendo().Button()
+                        .Name("saveButton")
+                        .Content("Save")
+                        .HtmlAttributes(new { type = "submit", @class = "btn btn-success submit", style = "width:200px", value = "submit" })
+                        )
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+
+    //    $(document).ready(function() {
+    //  $("#ticketForm").submit(function() {
+    //    var selectedItem = $("TypeId").val();
+    //    if (selectedItem == "") {
+    //      alert("Please select a type!");
+    //      return false;
+    //    }
+    //  });
+    //});
+
+    let severitySelected = null;
+
+    function onSelect(e) {
+
+        severitySelected = $(e.target[0]).val();
+
+    }
+
+    $("#ticketForm").submit(function (e) {
+
+        let ticketObject = {
+
+            Title: $("#Title").val(),
+            Description: $("#Description").val(),
+            TypeId: $("#TypeId").val(),
+            SeverityId: severitySelected
+
+        };
+
+        if (ticketObject.TypeId == "") {
+            Swal.fire('Please select a type!')
+            return false;
+        }
+
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("CreateTicket", "Ticket")",
+            data: ticketObject,
+            success: function (data) {
+
+                if (!data.HasError) {
+                    console.log("success");
+                }
+                else {
+                    console.log("failed");
+                }
+
+            }
+        })
+
+    })
+
+</script>

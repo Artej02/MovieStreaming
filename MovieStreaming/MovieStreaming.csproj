@@ -40,7 +40,6 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\Users\Data\" />
     <Folder Include="Areas\Users\Models\" />
-    <Folder Include="Areas\Users\Views\Complaint\" />
   </ItemGroup>
 
 </Project>
