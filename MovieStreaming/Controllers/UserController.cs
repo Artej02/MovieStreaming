@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,13 +11,13 @@ using Kendo.Mvc.Extensions;
 using MovieStreaming.Custom.DatabaseHelpers;
 using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
 using MovieStreaming.Areas.Admin.Models.Role;
-using MovieStreaming.Areas.Admin.Models.User;
+using MovieStreaming.Custom.Models.User;
 
 namespace MovieStreaming.Controllers
 {
     public class UserController : Controller
     {
-        private MovieDBContext _context = new MovieDBContext();
+        MovieDBContext _context = new MovieDBContext();
 
         public UserController(MovieDBContext context)
         {
@@ -71,7 +71,7 @@ namespace MovieStreaming.Controllers
             }
         }
 
-        public ActionResult Update_Users([DataSourceRequest] DataSourceRequest request, User usr)
+        public ActionResult Update_Roles([DataSourceRequest] DataSourceRequest request, User usr)
         {
             try
             {
@@ -93,7 +93,7 @@ namespace MovieStreaming.Controllers
             }
         }
 
-        public ActionResult Delete_Users([DataSourceRequest] DataSourceRequest request, User usr)
+        public ActionResult Delete_Roles([DataSourceRequest] DataSourceRequest request, User usr)
         {
             try
             {
