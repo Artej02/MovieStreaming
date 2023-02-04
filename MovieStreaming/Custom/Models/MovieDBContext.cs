@@ -5,7 +5,7 @@ using MovieStreaming.Areas.Admin.Models.ChangeLogs;
 using MovieStreaming.Areas.Admin.Models.Complaint;
 using MovieStreaming.Areas.Admin.Models.Movie;
 using MovieStreaming.Areas.Admin.Models.Role;
-using MovieStreaming.Custom.Models.User;
+using MovieStreaming.Areas.Admin.Models.User;
 
 namespace MovieStreaming.Custom.Models
 {
@@ -16,7 +16,7 @@ namespace MovieStreaming.Custom.Models
 
         public MovieDBContext(DbContextOptions<MovieDBContext> dbContextOptions) : base(dbContextOptions) { }
 
-        public virtual DbSet<User.User> Users { get; set; }
+        public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<Role> Roles { get; set; }
         public virtual DbSet<Movie> Movies { get; set; }
         public virtual DbSet<Complaint> Complaints { get; set; }
@@ -39,7 +39,7 @@ namespace MovieStreaming.Custom.Models
 
             });
 
-            modelBuilder.Entity<User.User>(entity =>
+            modelBuilder.Entity<User>(entity =>
             {
                 entity.ToTable("User");
 

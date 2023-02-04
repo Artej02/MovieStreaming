@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
-using MovieStreaming.Custom.Models.User;
+using MovieStreaming.Areas.Admin.Models.User;
 
 namespace MovieStreaming.Controllers
 {

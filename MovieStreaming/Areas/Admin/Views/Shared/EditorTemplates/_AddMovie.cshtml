@@ -1,0 +1,62 @@
+﻿@model MovieStreaming.Areas.Admin.Models.Movie.MoviePopupViewModel
+@using Kendo.Mvc.UI
+
+<form id="moviePopupForm" method="post" enctype="multipart/form-data">
+    <input type="hidden" asp-for="Id" />
+    <div class="form-group">
+        <label for="Title">Title:</label>
+        <input type="text" class="form-control" asp-for="Title" />
+    </div>
+    <div class="form-group">
+        <label for="Description">Description:</label>
+        <input type="text" class="form-control" asp-for="Description" />
+    </div>
+    <div class="form-group">
+        <label for="Video">Video:</label>
+        <input type="file" class="form-control" id="video" asp-for="Video" />
+    </div>
+    <div class="form-group">
+        <label for="Cost">Cost:</label>
+        <input type="text" class="form-control" asp-for="Cost" />
+    </div>
+    <div class="mt-5 mb-4">
+        @(Html.Kendo().Button()
+            .Name("saveButton")
+            .Content("Save")
+            .HtmlAttributes(new { type = "submit", @class = "btn btn-success submit", style = "width:200px", value = "submit" })
+            )
+    </div>
+</form>
+
+<script>
+  $("#moviePopupForm").submit(function(e){
+
+  let formData = {
+      Title: $("#Title").val(),
+      Description: $("#Description").val(),
+      Video: $("#Video").get(0).files[0],
+      Cost: $("#Cost").val()
+  };
+  
+  console.log(formData);
+
+  $.ajax({
+    url: "@Url.Action("Create_Movies", "Movie")",
+    type: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function(response) {
+      window.location.reload;
+    }
+  })
+
+})
+   
+
+</script>
+<style>
+    .k-grid-update{
+        display: none;
+    }
+</style>
