@@ -11,16 +11,21 @@ using Kendo.Mvc.Extensions;
 using MovieStreaming.Custom.DatabaseHelpers;
 using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
 using MovieStreaming.Areas.Admin.Models.Movie;
+using System.IO;
+using Microsoft.AspNetCore.Http;
+using AutoMapper;
 
 namespace MovieStreaming.Areas.Admin.Controllers
 {
     public class MovieController : Controller
     {
         private MovieDBContext _context = new MovieDBContext();
+        private readonly IMapper _mapper;
 
-        public MovieController(MovieDBContext context)
+        public MovieController(MovieDBContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
         public ActionResult Index()
@@ -44,24 +49,52 @@ namespace MovieStreaming.Areas.Admin.Controllers
 
         }
 
-        public ActionResult Create_Movies([DataSourceRequest] DataSourceRequest request, Movie mov)
+        [HttpPost]
+        public IActionResult UploadFile()
         {
+            var file = Request.Form.Files[0];
+            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "videos", file.FileName);
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                file.CopyTo(stream);
+            }
+            return Ok(file.FileName);
+        }
+
+        public async Task<ActionResult> Create_Movies([DataSourceRequest] DataSourceRequest request, MoviePopupViewModel mov)
+            {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    if (mov.Video != null)
+                    {
+                        var fileName = Guid.NewGuid() + Path.GetExtension(mov.Video.FileName);
+                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "videos", fileName);
 
-                    _context.Movies.Add(mov);
-                    _context.SaveChanges();
-                    var _movlist = _context.Movies.ToList();
-                    return Json(new[] { mov }.ToDataSourceResult(request, ModelState));
+                        using (var stream = new FileStream(path, FileMode.Create))
+                        {
+                            await mov.Video.CopyToAsync(stream);
+
+                        }
+                        var movie = _mapper.Map<Movie>(mov);
+                        movie.Video = path;
+                        _context.Movies.Add(movie);
+                        _context.SaveChanges();
+                        var _movlist = _context.Movies.ToList();
+                        return Json(new[] { mov }.ToDataSourceResult(request, ModelState));
+                    }
+                    else
+                    {
+                        return Json(new { error = "Error!" });
+                    }
                 }
-
                 else
                 {
                     return Json(_context.Movies.ToList());
                 }
             }
+
             catch (Exception ex)
             {
                 return Json(ex.Message);

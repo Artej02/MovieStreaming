@@ -91,7 +91,7 @@
                                 tools.Create().Text("Add").HtmlAttributes(new { style = "color:#fff;background-color: #3b76e1;border-color: #3b76e1;" });
                                 tools.Excel().Text("Export");
                             })
-                            .Editable(editable => editable.Mode(GridEditMode.InLine))
+                            .Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("_AddMovie"))
                             .Excel(excel => excel
                             .FileName("Movies.xlsx")
                             .Filterable(true)

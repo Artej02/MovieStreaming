@@ -10,7 +10,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using MovieStreaming.Custom.DatabaseHelpers;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
-using MovieStreaming.Custom.Models.User;
+using MovieStreaming.Areas.Admin.Models.User;
 
 namespace MovieStreaming.Custom.Helpers
 {

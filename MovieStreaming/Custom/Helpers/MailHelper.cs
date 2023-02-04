@@ -4,13 +4,13 @@ using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
 using System;
 using MovieStreaming.Custom.DatabaseHelpers;
-using MovieStreaming.Custom.Models.User;
 using MailKit.Net.Smtp;
 using MimeKit;
 using MimeKit.Text;
 using MailKit.Security;
 using System.Linq;
 using MailKit;
+using MovieStreaming.Areas.Admin.Models.User;
 
 namespace MovieStreaming.Custom.Helpers
 {
