@@ -8,6 +8,8 @@ using System;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
 using MovieStreaming.Areas.Admin.Models.User;
+using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
 
 namespace MovieStreaming.Controllers
 {
@@ -15,10 +17,20 @@ namespace MovieStreaming.Controllers
     {
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login()
+        public async Task<IActionResult> Login()
         {
             if (User.Identity.IsAuthenticated)
-                return RedirectToAction(controllerName: "Home", actionName: "Index");
+            {
+                var roleId = new AuthorizeHelper(HttpContext).GetUserRole();    
+                if (roleId == 1)
+                {
+                    return RedirectToAction("Index", "Home", new { area = "Admin" });
+                }
+                else if (roleId == 2)
+                {
+                    return RedirectToAction("Index", "Dashboard", new { area = "Users" });
+                }
+            }
             return View();
         }
 
@@ -28,7 +40,7 @@ namespace MovieStreaming.Controllers
 
             if (ModelState.IsValid)
             {
-                var user = (await new Query().SelectSingle<User>("SELECT * FROM [Users] WHERE Username = @Username", new { @Username = login.Username }));
+                var user = (await new Query().SelectSingle<User>("SELECT * FROM [User] WHERE Username = @Username", new { @Username = login.Username }));
 
 
                 if (user.HasError)
@@ -50,11 +62,17 @@ namespace MovieStreaming.Controllers
                                 return Json(new { IsSuccessful = false, FailedValidation = false, IncorrectCredenials = false, WaitingConfirmation = false, IsApproved = false });
 
                             }
+                            else if(user.Result.IsApproved == true && user.Result.RoleId == 1)
+                            {
+                                await new AuthorizeHelper(HttpContext).SetAuthentication(user.Result, isPersistent: login.RememberLogin);
+
+                                return Json(new { IsSuccessful = true, FailedValidation = false, IncorrectCredenials = false, WaitingConfirmation = false, IsApproved = true , IsAdmin = true });
+                            }
                             else
                             {
                                 await new AuthorizeHelper(HttpContext).SetAuthentication(user.Result, isPersistent: login.RememberLogin);
 
-                                return Json(new { IsSuccessful = true, FailedValidation = false, IncorrectCredenials = false, WaitingConfirmation = false, IsApproved = true });
+                                return Json(new { IsSuccessful = true, FailedValidation = false, IncorrectCredenials = false, WaitingConfirmation = false, IsApproved = true , IsAdmin = false });
                             }
                         }
                         else
@@ -93,7 +111,7 @@ namespace MovieStreaming.Controllers
                     hashedPassword = password.Hash;
                     salt = password.Salt;
                 }
-                bool emailExists = (await new Query().SelectSingle<bool>($"select ISNULL((SELECT 1 FROM [Users] WHERE [Username] = '{user.Username}'), 0)")).Result;
+                bool emailExists = (await new Query().SelectSingle<bool>($"select ISNULL((SELECT 1 FROM [User] WHERE [Username] = '{user.Username}'), 0)")).Result;
 
                 if (emailExists)
                 {
@@ -101,7 +119,7 @@ namespace MovieStreaming.Controllers
                 }
                 else
                 {
-                    var createUpdateResult = await new Query().Execute("CreateUpdateDeleteUsers @CRUDOperation,@Id,@Name,@Surname,@Username,@Password,@Salt,@OrganisationId,@RoleId,@IsApproved,@CreatedUserId,@UpdatedUserId,@CreatedDate,@UpdatedDate", new
+                    var createUpdateResult = await new Query().Execute("CreateUpdateDeleteUsers @CRUDOperation,@Id,@Name,@Surname,@Username,@Password,@Salt,@RoleId,@IsApproved,@CreatedUserId,@UpdatedUserId,@CreatedDate,@UpdatedDate", new
                     {
                         @CRUDOperation = (int)CRUDOperation.Create,
                         @Id = user.Id,

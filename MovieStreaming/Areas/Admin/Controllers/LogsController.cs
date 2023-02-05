@@ -1,16 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MovieStreaming.Custom.Models;
-using MovieStreaming.Areas.Admin.Models.Movie;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
-using MovieStreaming.Custom.DatabaseHelpers;
-using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
 using MovieStreaming.Areas.Admin.Models.ChangeLogs;
 
 namespace MovieStreaming.Areas.Admin.Controllers

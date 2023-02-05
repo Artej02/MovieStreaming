@@ -75,6 +75,7 @@
                                 columns.Bound(p => p.Name).Title("Name").Width(150);
                                 columns.Bound(p => p.Surname).Title("Surname").Width(150);
                                 columns.Bound(p => p.Username).Title("Username").Width(150);
+                                columns.ForeignKey(p => p.RoleId, (System.Collections.IEnumerable)ViewBag.RoleId, "Value", "Text").Title("Role").Width(150);
                                 @*columns.ForeignKey(p => p.RoleId, (System.Collections.IEnumerable)ViewBag.RoleId, "Value", "Text").Title("Role").Width(150);*@
                                 columns.Bound(p => p.IsApproved).Title("Is Approved").Width(150);
 
@@ -92,7 +93,7 @@
                                 tools.Create().Text("Add").HtmlAttributes(new { style = "color:#fff;background-color: #3b76e1;border-color: #3b76e1;" });
                                 tools.Excel().Text("Export");
                             })
-                            .Editable(editable => editable.Mode(GridEditMode.InLine))
+                            .Editable(editable => editable.Mode(GridEditMode.PopUp).TemplateName("_AddUser"))
                             .Excel(excel => excel
                             .FileName("Users.xlsx")
                             .Filterable(true)

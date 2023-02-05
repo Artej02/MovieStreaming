@@ -89,6 +89,16 @@
                                         <i class="icon nav-icon" style="@(ViewBag.D==true?"fill:#3b76e1;":"")" data-eva="home"></i>Dashboard
                                     </a>
                                 </li>
+                                <li class="nav-item @(ViewBag.M==true?"active":"")">
+                                    <a class="nav-link @(ViewBag.M==true?"active":"")" asp-area="Users" asp-controller="Movies" asp-action="Index">
+                                        <i class="icon nav-icon" style="@(ViewBag.M==true?"fill:#3b76e1;":"")" data-eva="home"></i>Movies
+                                    </a>
+                                </li>
+                                <li class="nav-item @(ViewBag.C==true?"active":"")">
+                                    <a class="nav-link @(ViewBag.C==true?"active":"")" asp-area="Users" asp-controller="Complaint" asp-action="Form">
+                                        <i class="icon nav-icon" style="@(ViewBag.C==true?"fill:#3b76e1;":"")" data-eva="home"></i>Dashboard
+                                    </a>
+                                </li>
                         </ul>
                     </div>
                     </nav>

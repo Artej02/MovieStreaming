@@ -11,7 +11,10 @@ using Kendo.Mvc.Extensions;
 using MovieStreaming.Custom.DatabaseHelpers;
 using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
 using MovieStreaming.Areas.Admin.Models.Role;
-using MovieStreaming.Custom.Models.User;
+using MovieStreaming.Areas.Admin.Models.User;
+using MovieStreaming.Custom.Helpers;
+using MovieStreaming.Custom.Models.Configuration;
+using MovieStreaming.Custom.Models.LogsModel;
 
 namespace MovieStreaming.Controllers
 {
@@ -24,10 +27,10 @@ namespace MovieStreaming.Controllers
             _context = context;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            //var select = from s in _context.Roles select new { s.Id, s.Name };
-            //ViewBag.RoleId = select;
+            
+            ViewBag.RoleId = (await new Query().Select<SelectListItem>("select Id AS [Value], Name AS Text from Role")).Result;
             ViewBag.U = true;
             return View();
         }
@@ -47,53 +50,107 @@ namespace MovieStreaming.Controllers
 
         }
 
-        public ActionResult Create_Users([DataSourceRequest] DataSourceRequest request, User usr)
+        public async Task<ActionResult> Create_Users([DataSourceRequest] DataSourceRequest request, User user)
         {
-            try
+            var userId = new AuthorizeHelper(HttpContext).GetUserID();
+            bool HasAffected = false;
+            if (!user.Id.HasValue && user.Password == null)
             {
-                if (ModelState.IsValid)
-                {
-
-                    _context.Users.Add(usr);
-                    _context.SaveChanges();
-                    var _usrlist = _context.Users.ToList();
-                    return Json(new[] { usr }.ToDataSourceResult(request, ModelState));
-                }
-
-                else
-                {
-                    return Json(_context.Users.ToList());
-                }
+                ModelState.AddModelError("Password", "Please enter the password");
+                return View("AddUsers", user);
             }
-            catch (Exception ex)
+            string hashedPassword = null, salt = null;
+            if (user.Password != null)
             {
-                return Json(ex.Message);
+                var password = new PasswordHelper(user.Password);
+                hashedPassword = password.Hash;
+                salt = password.Salt;
             }
+            var userExists = (await new Query().SelectSingle<int>($"select Count(*) from User where Username = '{user.Username}'")).Result;
+            if (userExists > 0)
+            {
+                return this.Json(new DataSourceResult
+                {
+                    Errors = "This user exists!"
+                });
+            }
+            var createUpdateResult = await new Query().ExecuteAndGetInsId("CreateUpdateDeleteUsers @CRUDOperation,@Id,@Name,@Surname,@Username,@Password,@Salt,@RoleId,@IsApproved,@CreatedUserId,@UpdatedUserId,@CreatedDate,@UpdatedDate", new
+            {
+                @CRUDOperation = user.Id.HasValue ? (int)CRUDOperation.Update : (int)CRUDOperation.Create,
+                @Id = user.Id,
+                @Name = user.Name,
+                @Surname = user.Surname,
+                @Username = user.Username,
+                @Password = hashedPassword,
+                @Salt = salt,
+                @RoleId = user.RoleId,
+                @IsApproved = user.IsApproved,
+                @CreatedUserId = userId,
+                @UpdatedUserId = userId,
+                @CreatedDate = DateTime.Now,
+                @UpdatedDate = DateTime.Now
+            });
+            if (createUpdateResult == 0)
+            {
+                return this.Json(new DataSourceResult
+                {
+                    Errors = "Error occurred! "
+                });
+            }
+            else if (createUpdateResult > 0)
+            {
+                HasAffected = true;
+                var afterLogData = (await new Query().SelectSingle<UserLog>($"Select * From User Where Id={createUpdateResult}")).Result;
+                var serializedObject = new ChangeLogHelper().SerializeObject(null, afterLogData, (int)ChangeLogTable.Users, userId, (int)ChangeLogAction.Inserte);
+                var addLog = new ChangeLogHelper().AddLog(serializedObject);
+            }
+            return Json(HasAffected);
         }
 
-        public ActionResult Update_Roles([DataSourceRequest] DataSourceRequest request, User usr)
+        public async Task<ActionResult> Update_Users([DataSourceRequest] DataSourceRequest request, User user)
         {
-            try
+            var userId = new AuthorizeHelper(HttpContext).GetUserID();
+            var beforeLogData = (await new Query().SelectSingle<UserLog>($"Select * from User where Id={user.Id}")).Result;
+            string hashedPassword = null, salt = null;
+            if (user.Password != null)
             {
-                if (ModelState.IsValid)
-                {
-                    _context.Entry(usr).State = EntityState.Modified;
-                    _context.SaveChanges();
-                    return Json(new[] { usr }.ToDataSourceResult(request, ModelState));
-
-                }
-                else
-                {
-                    return Json(_context.Users.ToList());
-                }
+                var password = new PasswordHelper(user.Password);
+                hashedPassword = password.Hash;
+                salt = password.Salt;
             }
-            catch (Exception ex)
+            var createUpdateResult = await new Query().Execute("CreateUpdateDeleteUsers @CRUDOperation,@Id,@Name,@Surname,@Username,@Password,@Salt,@RoleId,@IsApproved,@CreatedUserId,@UpdatedUserId,@CreatedDate,@UpdatedDate", new
             {
-                return Json(ex.Message);
+                @CRUDOperation = user.Id.HasValue ? (int)CRUDOperation.Update : (int)CRUDOperation.Create,
+                @Id = user.Id,
+                @Name = user.Name,
+                @Surname = user.Surname,
+                @Username = user.Username,
+                @Password = hashedPassword,
+                @Salt = salt,
+                @RoleId = user.RoleId,
+                @IsApproved = user.IsApproved,
+                @CreatedUserId = userId,
+                @UpdatedUserId = userId,
+                @CreatedDate = DateTime.Now,
+                @UpdatedDate = DateTime.Now
+            });
+            if (createUpdateResult.HasError)
+            {
+                return this.Json(new DataSourceResult
+                {
+                    Errors = "Error occurred! "
+                });
             }
+            else
+            {
+                var afterLogData = (await new Query().SelectSingle<UserLog>($"Select * From User Where Id={user.Id}")).Result;
+                var serializedObject = new ChangeLogHelper().SerializeObject(beforeLogData, afterLogData, (int)ChangeLogTable.Users, userId, (int)ChangeLogAction.Update);
+                var addLog = new ChangeLogHelper().AddLog(serializedObject);
+            }
+            return Json(createUpdateResult.HasAffected);
         }
 
-        public ActionResult Delete_Roles([DataSourceRequest] DataSourceRequest request, User usr)
+        public ActionResult Delete_Users([DataSourceRequest] DataSourceRequest request, User usr)
         {
             try
             {

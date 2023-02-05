@@ -1,0 +1,53 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    Layout = null;
+}
+
+@using Kendo.Mvc.UI
+@model MovieStreaming.Areas.Admin.Models.User.User
+
+<input type="hidden" asp-for="Id" />
+<br />
+<div class="content">
+    <div class="row">
+        <label asp-for="Name" class="col-form-label col-lg-4 col-sm-10"></label>
+        <input asp-for="Name" class="form-control  col-lg-7 col-sm-10" /><br />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div><br />
+    <div class="row">
+        <label asp-for="Surname" class="col-form-label col-lg-4 col-sm-10"></label>
+        <input asp-for="Surname" class="form-control  col-lg-7 col-sm-10" /><br />
+        <span asp-validation-for="Surname" class="text-danger"></span>
+    </div><br />
+    <div class="row">
+        <label asp-for="Username" class="col-form-label col-lg-4 col-sm-10"></label>
+        <input asp-for="Username" class="form-control  col-lg-7 col-sm-10" /><br />
+        <span asp-validation-for="Username" class="text-danger"></span>
+    </div><br />
+    <div class="row">
+        <label asp-for="Password" class="col-form-label col-lg-4 col-sm-10"></label>
+        <input asp-for="Password" id="password" class="form-control  col-lg-7 col-sm-10" type="password"/><br />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div><br />
+
+    <div id="role" class="row">
+        <label asp-for="RoleId" class="col-form-label col-lg-4 col-sm-10"></label>
+        @(
+            Html.Kendo().DropDownListFor(m => m.RoleId)
+            .DataTextField("Text")
+            .DataValueField("Value")
+            .ValuePrimitive(true)
+            .BindTo(new SelectList((System.Collections.IEnumerable)ViewBag.RoleId, "Value", "Text"))
+            )
+    </div>
+    <br />
+    <div id="IsApproved">
+            <label asp-for="IsApproved" class="col-form-label col-lg-4 col-sm-10"></label>
+            <input type="checkbox" data-val="true" id="IsApproved" name="IsApproved" value="true">
+    </div>
+
+</div>
+
+ 

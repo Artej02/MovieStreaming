@@ -198,9 +198,11 @@
                     data: form.serialize(), // serializes the form's elements.
                     success: function (data) {
                         console.log(data)
-                        if (data.IsSuccessful) {
+                        if (data.IsSuccessful && data.IsAdmin) {
                             top.location.href = '@Url.Action("Index", "Home", new { area = "Admin" })';
-                        } else if (data.FailedValidation) {
+                        }else if(data.IsSuccessful && !data.IsAdmin){
+                            top.location.href = '@Url.Action("Index", "Dashboard", new { area = "Users" })';
+                        }else if (data.FailedValidation) {
                             $(".requestedField").css("display", "block");
                         } else if (data.IncorrectCredenials) {
                             $(".requestedField").css("display", "none");

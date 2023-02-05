@@ -6,6 +6,7 @@ namespace MovieStreaming.Areas.Users.Controllers
     {
         public ActionResult Index()
         {
+            ViewBag.M = true;
             return View();
         }
     }
