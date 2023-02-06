@@ -1,0 +1,66 @@
+﻿@using Kendo.Mvc.UI
+@model UBOPortal.Custom.Models.Ticket.Reply
+@{
+    Layout = null;
+}
+@using UBOPortal.Custom.Models
+@using UBOPortal.Custom.Helpers
+@{
+    var language = new LanguageHelper(Context);
+}
+
+<input type="hidden" asp-for="Id" />
+<input type="hidden" asp-for="TicketId" value="@ViewBag.TicketId" />
+
+
+<div class="content">
+
+    <div class="row">
+        <label asp-for="Message">Message</label>
+        @(Html.Kendo().TextArea()
+            .Name("Message")
+            .Rows(7)
+            .MaxLength(2000)
+            .HtmlAttributes(new { style = "width: 100% " })
+            )
+
+    </div><br />
+
+    @(
+        Html.Kendo().Button()
+        .Name(language.Get("Send")).HtmlAttributes(new
+        {
+            onclick = "Send()",
+            style = "background-color:rgba(var(--bs-primary-rgb),var(--bs-text-opacity))!important;color:#3b76e1;"
+        }).Content(language.Get("Send")).IconClass("fas fa-reply")
+
+        )
+
+</div>
+
+<script>
+    function Send(e) {
+
+        let objectToPost = {
+            Message: $("#Message").val(),
+        }
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CreateReply", "Ticket")' + '?ticketId=' + @ViewBag.TicketId,
+            data: objectToPost,
+            success: function (data) {
+                console.log(data)
+
+                if (!data.HasError) {
+                    $("#clickme").data("kendoWindow").close();
+                    $("#gridReply").getKendoGrid().dataSource.read();
+                }
+
+            }
+        });
+
+
+    }
+
+</script>
