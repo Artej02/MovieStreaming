@@ -6,9 +6,14 @@ using MovieStreaming.Custom.Models;
 using Kendo.Mvc.UI;
 using Kendo.Mvc.Extensions;
 using MovieStreaming.Areas.Admin.Models.ChangeLogs;
+using Microsoft.AspNetCore.Authorization;
+using MovieStreaming.Custom.Helpers;
+using System.Threading.Tasks;
+using MovieStreaming.Custom.DatabaseHelpers;
 
 namespace MovieStreaming.Areas.Admin.Controllers
 {
+    [Authorize]
     public class LogsController : Controller
     {
         private MovieDBContext _context = new MovieDBContext();
@@ -18,8 +23,14 @@ namespace MovieStreaming.Areas.Admin.Controllers
             _context = context;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
+            var userId = new AuthorizeHelper(HttpContext).GetUserID();
+            Models.User.User currentUser = (await new Query().SelectSingle<Models.User.User>($"select * from [User] where Id={userId}")).Result;
+            if (currentUser.RoleId == 2)
+            {
+                return RedirectToAction("Index", "Dashboard", new { area = "Users" });
+            }
             ViewBag.CL = true;
             return View();
         }
@@ -105,8 +116,14 @@ namespace MovieStreaming.Areas.Admin.Controllers
             }
         }
 
-        public ActionResult Details(ChangeLog log)
+        public async Task<ActionResult> Details(ChangeLog log)
         {
+            var userId = new AuthorizeHelper(HttpContext).GetUserID();
+            Models.User.User currentUser = (await new Query().SelectSingle<Models.User.User>($"select * from [User] where Id={userId}")).Result;
+            if (currentUser.RoleId == 2)
+            {
+                return RedirectToAction("Index", "Dashboard", new { area = "Users" });
+            }
             ChangeLog logs = _context.Logs.Find(log.Id);
 
             return View(logs);

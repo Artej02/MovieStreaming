@@ -26,7 +26,7 @@ namespace MovieStreaming.Custom.Helpers
         public async Task<object> SendResetPasswordMailAsync(String token, String Username)
         {
 
-            var user = (await new Query().SelectSingle<User>("SELECT * FROM [Users] WHERE Username = @Username", new { @Username = Username }));
+            var user = (await new Query().SelectSingle<User>("SELECT * FROM [User] WHERE Username = @Username", new { @Username = Username }));
 
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(Configuration["EmailCredenciale:Email"]);
@@ -61,8 +61,8 @@ namespace MovieStreaming.Custom.Helpers
 
         public async Task<object> SendEmailForTicketCreation(int? userId)
         {
-            var userID = (await new Query().SelectSingle<User>("SELECT * FROM [Users] WHERE Id = @Id", new { @Id = userId }));
-            var admins = (await new Query().Select<User>("SELECT * FROM [Users] WHERE RoleId = 12")).Result.ToList();
+            var userID = (await new Query().SelectSingle<User>("SELECT * FROM [User] WHERE Id = @Id", new { @Id = userId }));
+            var admins = (await new Query().Select<User>("SELECT * FROM [User] WHERE RoleId = 12")).Result.ToList();
 
             foreach (var admin in admins)
             {
@@ -95,6 +95,43 @@ namespace MovieStreaming.Custom.Helpers
                 }
             }
             return new { Sent = true };
+        }
+        public async Task<object> SendReplyToEmail(int userId)
+        {
+
+
+            var userID = (await new Query().SelectSingle<User>("SELECT * FROM [User] WHERE Id = @Id", new { @Id = userId }));
+
+            var email = new MimeMessage();
+            email.Sender = MailboxAddress.Parse(Configuration["EmailCredenciale:Email"]);
+            email.To.Add(MailboxAddress.Parse(userID.Result.Username));
+            email.Subject = "UBOResearchTool";
+            email.Body = new TextPart(TextFormat.Html)
+            {
+
+
+                Text = "<p>You have a reply to your ticket.\n :</p><p><a href=" + Configuration["TicketURL"] + "> Click to see it!</a></p>"
+            };
+
+            // send email
+            using var smtp = new SmtpClient();
+            try
+            {
+                smtp.CheckCertificateRevocation = false;
+                smtp.Connect(Configuration["EmailCredenciale:Smtp"], Int32.Parse(Configuration["EmailCredenciale:Port"]), SecureSocketOptions.StartTls);
+                smtp.Authenticate(Configuration["EmailCredenciale:Email"], Configuration["EmailCredenciale:Password"]);
+                smtp.Send(email);
+                smtp.Disconnect(true);
+
+                return new { Sent = true };
+
+            }
+            catch (Exception e)
+            {
+                String message = e.Message;
+                return new { Sent = false, Message = message };
+            }
+
         }
 
     }

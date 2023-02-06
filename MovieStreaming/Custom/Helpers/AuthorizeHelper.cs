@@ -75,6 +75,10 @@ namespace MovieStreaming.Custom.Helpers
         {
             return int.Parse(httpContext.User.FindFirst(IDUser)?.Value);
         }
+        public string GetUserName()
+        {
+            return string.Format(httpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+        }
         public int GetOrganisationID()
         {
             return int.Parse(httpContext.User.FindFirst(IDOrganization)?.Value);

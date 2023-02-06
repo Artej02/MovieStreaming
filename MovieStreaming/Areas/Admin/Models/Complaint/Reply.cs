@@ -1,13 +1,12 @@
-﻿using Org.BouncyCastle.Bcpg.OpenPgp;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace MovieStreaming.Areas.Adim.Models.Complaint
+namespace MovieStreaming.Areas.Admin.Models.Complaint
 {
     public class Reply
     {
         public int Id { get; set; }
-        public int TicketId { get; set; }
+        public int ComplaintId { get; set; }
 
         [Required]
         public string Message { get; set; }

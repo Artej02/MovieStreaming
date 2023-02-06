@@ -23,6 +23,12 @@ namespace UBOResearchTool.Controllers
             ViewBag.Views = (await new Query().Select<SelectListItem>($"select Id as [Value], [Name] as [Text] from [View]")).Result;
             ViewBag.AuthorizationType = (await new Query().Select<SelectListItem>($"select Id as [Value], [Type] as [Text] from [AuthorizationType]")).Result;
             ViewBag.VA = true;
+            var userId = new AuthorizeHelper(HttpContext).GetUserID();
+            MovieStreaming.Areas.Admin.Models.User.User currentUser = (await new Query().SelectSingle<MovieStreaming.Areas.Admin.Models.User.User>($"select * from [User] where Id={userId}")).Result;
+            if (currentUser.RoleId == 2)
+            {
+                return RedirectToAction("Index", "Dashboard", new { area = "Users" });
+            }
 
             return View();
         }

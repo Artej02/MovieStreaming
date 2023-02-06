@@ -17,9 +17,12 @@ using AutoMapper;
 using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Authorization;
+using MovieStreaming.Custom.Helpers;
 
 namespace MovieStreaming.Areas.Admin.Controllers
 {
+    [Authorize]
     public class MovieController : Controller
     {
         private MovieDBContext _context = new MovieDBContext();
@@ -33,8 +36,14 @@ namespace MovieStreaming.Areas.Admin.Controllers
             WebHostEnvironment = webHostEnvironment;
         }
 
-        public ActionResult Index(UploadOverviewModel model)
+        public async Task<ActionResult> Index(UploadOverviewModel model)
         {
+            var userId = new AuthorizeHelper(HttpContext).GetUserID();
+            Models.User.User currentUser = (await new Query().SelectSingle<Models.User.User>($"select * from [User] where Id={userId}")).Result;
+            if (currentUser.RoleId == 2)
+            {
+                return RedirectToAction("Index", "Dashboard", new { area = "Users" });
+            }
             if (model.AllowedExtensions == null)
             {
                 model = new UploadOverviewModel()
@@ -149,8 +158,14 @@ namespace MovieStreaming.Areas.Admin.Controllers
             }
         }
 
-        public ActionResult Details(Movie mov)
+        public async Task<ActionResult> Details(Movie mov)
         {
+            var userId = new AuthorizeHelper(HttpContext).GetUserID();
+            Models.User.User currentUser = (await new Query().SelectSingle<Models.User.User>($"select * from [User] where Id={userId}")).Result;
+            if (currentUser.RoleId == 2)
+            {
+                return RedirectToAction("Index", "Dashboard", new { area = "Users" });
+            }
             Movie movie = _context.Movies.Find(mov.Id);
 
             return View(movie);

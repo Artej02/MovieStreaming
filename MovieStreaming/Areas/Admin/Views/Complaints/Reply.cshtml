@@ -4,6 +4,7 @@
     Layout = null;
 }
 @using MovieStreaming.Custom.Models
+@using MovieStreaming.Custom.Models.Configuration
 @using MovieStreaming.Custom.Helpers
 
 <input type="hidden" asp-for="Id" />
@@ -13,25 +14,25 @@
 <div class="content">
 
     <div class="row">
-        <label asp-for="Message">Message</label>
+        <label asp-for="Message"> Message </label>
         @(Html.Kendo().TextArea()
-            .Name("Message")
-            .Rows(7)
-            .MaxLength(2000)
-            .HtmlAttributes(new { style = "width: 100% " })
-            )
+                .Name("Message")
+                .Rows(7)
+                .MaxLength(2000)
+                .HtmlAttributes(new { style = "width: 100% " })
+                )
 
     </div><br />
 
     @(
-        Html.Kendo().Button()
-        .Name("Send").HtmlAttributes(new
-        {
-            onclick = "Send()",
-            style = "background-color:rgba(var(--bs-primary-rgb),var(--bs-text-opacity))!important;color:#3b76e1;"
-        }).Content("Send").IconClass("fas fa-reply")
+            Html.Kendo().Button()
+            .Name("Send").HtmlAttributes(new
+            {
+                onclick = "Send()",
+                style = "background-color:rgba(var(--bs-primary-rgb),var(--bs-text-opacity))!important;color:#3b76e1;"
+            }).Content("Send").IconClass("fas fa-reply")
 
-        )
+            )
 
 </div>
 
@@ -41,10 +42,9 @@
         let objectToPost = {
             Message: $("#Message").val(),
         }
-
         $.ajax({
             type: "POST",
-            url: '@Url.Action("CreateReply", "Complaint")' + '?complaintId=' + @ViewBag.ComplaintId,
+            url: '@Url.Action("CreateReply", "Complaints")' + '?complaintId=' + @ViewBag.ComplaintId,
             data: objectToPost,
             success: function (data) {
                 console.log(data)
@@ -59,5 +59,4 @@
 
 
     }
-
 </script>

@@ -11,9 +11,12 @@ using Kendo.Mvc.Extensions;
 using MovieStreaming.Custom.DatabaseHelpers;
 using Telerik.Windows.Documents.Spreadsheet.Expressions.Functions;
 using MovieStreaming.Areas.Admin.Models.Role;
+using Microsoft.AspNetCore.Authorization;
+using MovieStreaming.Custom.Helpers;
 
 namespace MovieStreaming.Areas.Admin.Controllers
 {
+    [Authorize]
     public class RoleController : Controller
     {
         private MovieDBContext _context = new MovieDBContext();
@@ -23,8 +26,14 @@ namespace MovieStreaming.Areas.Admin.Controllers
             _context = context;
         }
 
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
+            var userId = new AuthorizeHelper(HttpContext).GetUserID();
+            Models.User.User currentUser = (await new Query().SelectSingle<Models.User.User>($"select * from [User] where Id={userId}")).Result;
+            if (currentUser.RoleId == 2)
+            {
+                return RedirectToAction("Index", "Dashboard", new { area = "Users" });
+            }
             ViewBag.R = true;
             return View();
         }
@@ -110,8 +119,14 @@ namespace MovieStreaming.Areas.Admin.Controllers
             }
         }
 
-        public ActionResult Details(Role rol)
+        public async Task<ActionResult> Details(Role rol)
         {
+            var userId = new AuthorizeHelper(HttpContext).GetUserID();
+            Models.User.User currentUser = (await new Query().SelectSingle<Models.User.User>($"select * from [User] where Id={userId}")).Result;
+            if (currentUser.RoleId == 2)
+            {
+                return RedirectToAction("Index", "Dashboard", new { area = "Users" });
+            }
             Role role = _context.Roles.Find(rol.Id);
 
             return View(role);

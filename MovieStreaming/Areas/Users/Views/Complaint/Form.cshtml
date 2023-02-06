@@ -26,8 +26,11 @@
                             .Items(i =>
                             {
                                 i.Add()
-                                .Text("Option1")
+                                .Text("Movie Related")
                                 .Value("1");
+                                i.Add()
+                                .Text("Web Related")
+                                .Value("2");
                             })
                             .HtmlAttributes(new { style = "width:100% !important; background:#fff; border-radius:5px;" })
                             )
@@ -115,7 +118,7 @@
 
         $.ajax({
             type: "POST",
-            url: "@Url.Action("CreateTicket", "Ticket")",
+            url: "@Url.Action("CreateComplaint", "Complaint")",
             data: ticketObject,
             success: function (data) {
 
