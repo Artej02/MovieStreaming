@@ -1,5 +1,37 @@
-﻿    <h4>Movies</h4>
+﻿<h4>Movies</h4>
 
-<video width="320" height="240" controls>
-    <source src="~/videos/Batman.mp4" type="video/mp4">
-</video>
+    @foreach(var movie in ViewBag.Movies){
+    
+    <div class="pt-2 card" style="
+    width: 101%;
+    padding-left: 10px;
+    padding-bottom: 10px;
+">
+    
+    <h4>@movie.Title</h4> <button class="k-button" onclick="goToMovie(@movie.Id)">Watch Movie</button>
+      <video width="800" height="500" controls>
+        <source src="~/videos/@movie.Video" type="video/mp4">
+      </video>
+    </div>
+    <script>
+        function goToMovie(Id) {
+            window.location.href = '@Url.Action("Details","Movies")' + '/' + Id;
+        }
+    </script>
+    }
+
+     
+
+    <style>
+        .k-button{
+        width: 30%;
+        background-color: lightskyblue;
+        border: none;
+        }
+
+        .pb-3{
+        display: grid;
+        justify-content: center;
+        }
+
+    </style>

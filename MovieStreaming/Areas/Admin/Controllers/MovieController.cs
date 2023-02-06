@@ -14,6 +14,9 @@ using MovieStreaming.Areas.Admin.Models.Movie;
 using System.IO;
 using Microsoft.AspNetCore.Http;
 using AutoMapper;
+using Microsoft.AspNetCore.Hosting.Server;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Net.Http.Headers;
 
 namespace MovieStreaming.Areas.Admin.Controllers
 {
@@ -21,17 +24,27 @@ namespace MovieStreaming.Areas.Admin.Controllers
     {
         private MovieDBContext _context = new MovieDBContext();
         private readonly IMapper _mapper;
+        public IWebHostEnvironment WebHostEnvironment { get; set; }
 
-        public MovieController(MovieDBContext context, IMapper mapper)
+        public MovieController(MovieDBContext context, IMapper mapper, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
             _mapper = mapper;
+            WebHostEnvironment = webHostEnvironment;
         }
 
-        public ActionResult Index()
+        public ActionResult Index(UploadOverviewModel model)
         {
+            if (model.AllowedExtensions == null)
+            {
+                model = new UploadOverviewModel()
+                {
+                    AllowedExtensions = new string[] { "mp4" },
+                    IsLimited = false
+                };
+            }
             ViewBag.M = true;
-            return View();
+            return View(model);
         }
 
         public ActionResult Read_Movies([DataSourceRequest] DataSourceRequest request)
@@ -49,52 +62,45 @@ namespace MovieStreaming.Areas.Admin.Controllers
 
         }
 
-        [HttpPost]
-        public IActionResult UploadFile()
+        public async Task<ActionResult> Submit(IEnumerable<IFormFile> files)
         {
-            var file = Request.Form.Files[0];
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "videos", file.FileName);
-            using (var stream = new FileStream(filePath, FileMode.Create))
+            if (files != null)
             {
-                file.CopyTo(stream);
+                foreach (var file in files)
+                {
+                    var fileContent = ContentDispositionHeaderValue.Parse(file.ContentDisposition);
+                    var fileName = Path.GetFileName(fileContent.FileName.ToString().Trim('"'));
+                    var physicalPath = Path.Combine("wwwroot", "videos", fileName);
+
+                    // Saving the file
+                    using (var fileStream = new FileStream(physicalPath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+                    }
+                }
             }
-            return Ok(file.FileName);
+
+            return Content("");
         }
 
-        public async Task<ActionResult> Create_Movies([DataSourceRequest] DataSourceRequest request, MoviePopupViewModel mov)
+
+        public ActionResult Create_Movies([DataSourceRequest] DataSourceRequest request, Movie mov)
             {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    if (mov.Video != null)
-                    {
-                        var fileName = Guid.NewGuid() + Path.GetExtension(mov.Video.FileName);
-                        var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "videos", fileName);
-
-                        using (var stream = new FileStream(path, FileMode.Create))
-                        {
-                            await mov.Video.CopyToAsync(stream);
-
-                        }
-                        var movie = _mapper.Map<Movie>(mov);
-                        movie.Video = path;
-                        _context.Movies.Add(movie);
-                        _context.SaveChanges();
-                        var _movlist = _context.Movies.ToList();
-                        return Json(new[] { mov }.ToDataSourceResult(request, ModelState));
-                    }
-                    else
-                    {
-                        return Json(new { error = "Error!" });
-                    }
+                    _context.Movies.Add(mov);
+                    _context.SaveChanges();
+                    var _comlist = _context.Movies.ToList();
+                    return Json(new[] { mov }.ToDataSourceResult(request, ModelState));
                 }
                 else
                 {
                     return Json(_context.Movies.ToList());
+
                 }
             }
-
             catch (Exception ex)
             {
                 return Json(ex.Message);

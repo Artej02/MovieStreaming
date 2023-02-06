@@ -1,23 +1,47 @@
-﻿@model MovieStreaming.Areas.Admin.Models.Movie.MoviePopupViewModel
+﻿@model MovieStreaming.Areas.Admin.Models.Movie.Movie
 @using Kendo.Mvc.UI
+<script>
+    var inputV = document.getElementById("videoInput");
 
+    function onSuccess(e) {
+        inputV.value = getFileInfo(e);
+    }
+
+    function getFileInfo(e) {
+        return $.map(e.files, function (file) {
+            var info = file.name;
+            return info;
+        }).join(", ");
+    }
+</script>
 <form id="moviePopupForm" method="post" enctype="multipart/form-data">
     <input type="hidden" asp-for="Id" />
     <div class="form-group">
         <label for="Title">Title:</label>
-        <input type="text" class="form-control" asp-for="Title" />
+        <input id="titleInput" type="text" class="form-control" asp-for="Title" />
     </div>
     <div class="form-group">
         <label for="Description">Description:</label>
-        <input type="text" class="form-control" asp-for="Description" />
+        <input id="descriptionInput" type="text" class="form-control" asp-for="Description" />
     </div>
     <div class="form-group">
         <label for="Video">Video:</label>
-        <input type="file" class="form-control" id="video" asp-for="Video" />
+        <input id="videoInput" asp-for="Video" type="text" class="form-control" />
+        <div>
+         @(Html.Kendo().Upload()
+          .Name("files")
+          .Multiple(false)
+          .Async(a => a
+            .Save("Submit", "Movie")
+            .AutoUpload(false)
+            )
+          .Events(events => events.Success("onSuccess"))
+          )
+          </div>
     </div>
     <div class="form-group">
         <label for="Cost">Cost:</label>
-        <input type="text" class="form-control" asp-for="Cost" />
+        <input id="costInput" type="text" class="form-control" asp-for="Cost" />
     </div>
     <div class="mt-5 mb-4">
         @(Html.Kendo().Button()
@@ -32,10 +56,10 @@
   $("#moviePopupForm").submit(function(e){
 
   let formData = {
-      Title: $("#Title").val(),
-      Description: $("#Description").val(),
-      Video: $("#Video").get(0).files[0],
-      Cost: $("#Cost").val()
+      Title: $("#titleInput").val(),
+      Description: $("#descriptionInput").val(),
+      Video: $("#videoInput").val(),
+      Cost: $("#costInput").val()
   };
   
   console.log(formData);
@@ -44,8 +68,6 @@
     url: "@Url.Action("Create_Movies", "Movie")",
     type: "POST",
     data: formData,
-    contentType: false,
-    processData: false,
     success: function(response) {
       window.location.reload;
     }

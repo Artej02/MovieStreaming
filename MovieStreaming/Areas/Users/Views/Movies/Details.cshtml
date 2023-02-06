@@ -1,0 +1,12 @@
+﻿@foreach(var movie in ViewBag.ThisMovie){
+<video class="main-video" controls>
+    <source src="~/videos/@movie.Video" type="video/mp4">
+</video>
+}
+
+<style>
+    .main-video{
+        width: -webkit-fill-available;
+        height: -webkit-fill-available;
+    }
+</style>

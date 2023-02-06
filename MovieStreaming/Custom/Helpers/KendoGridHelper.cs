@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using UBOResearchTool.Custom.Attributes;
+using MovieStreaming.Custom.Attributes;
 
-namespace UBOResearchTool.Custom.Helpers
+namespace MovieStreaming.Custom.Helpers
 {
     public class KendoGridHelper
     {
