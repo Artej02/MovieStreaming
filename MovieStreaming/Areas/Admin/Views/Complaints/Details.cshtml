@@ -1,0 +1,233 @@
+﻿@using Kendo.Mvc.UI
+@using MovieStreaming.Custom.Models
+@using MovieStreaming.Custom.Helpers
+@{
+    //var language = new LanguageHelper(Context);
+}
+<script src="~/kendo/js/jszip.min.js"></script>
+<script>
+    function sync_handler(e) {
+        e.sender.read();
+    }
+    function onError(e, status) {
+        var popupNotification = $("#notification").data("kendoNotification");
+        if (e.status == "customerror") {
+            popupNotification.show(e.errors);
+        }
+        else {
+            popupNotification.show("Generic server error!");
+        }
+    }
+</script>
+@model MovieStreaming.Areas.Admin.Models.Complaint.Complaint;
+
+
+<style>
+    .k-grid-header {
+        background-color: #f5f6f8;
+    }
+
+    .k-toolbar .k-button {
+        color: #000;
+        background-color: #f5f6f8;
+        border-color: #f5f6f8;
+    }
+
+    .k-pager-numbers .k-link.k-state-selected {
+        color: white;
+        background-color: #7f838b;
+    }
+
+    .k-pager-numbers .k-link {
+        color: #7f838b;
+    }
+
+    .k-command-cell .k-grid-update {
+        color: #3b76e1;
+        background-color: rgba(88,143,209,.23) !important;
+    }
+
+    .k-command-cell .k-grid-cancel {
+        color: #000;
+        background-color: #f5f6f8;
+        border-color: #f5f6f8;
+    }
+
+    .k-command-cell .k-grid-edit {
+        color: #63ad6f;
+        background-color: rgba(99,173,111,.1);
+    }
+
+    .k-command-cell .k-grid-delete {
+        color: #f56e6e;
+        background-color: rgba(245,110,110,.1);
+    }
+
+    .k-command-cell .k-grid-details {
+        color: #0E6655;
+        background-color: #E8F6F3;
+    }
+</style>
+<div class="container mt-5">
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex align-items-start">
+                        <div class="flex-grow-1">
+                            <h4></h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <input type="hidden" value="Model.Id" />
+
+                        <h3 class="text-center">@Model.Title</h3>
+
+
+                    </div><br />
+
+                    <p class="text-center">@Model.Description</p>
+
+                    <br />
+                    <br />
+                    <button @(Model.IsActive == true? "":"disabled") style="background-color:rgba(var(--bs-primary-rgb),var(--bs-text-opacity))!important;color:#3b76e1;border:none;" onclick="clickme()" class="k-button k-button-icontext"><icon class="fas fa-reply"></icon>Reply</button>
+
+                    @*@(Html.Kendo().Button()
+                        .Name("Reply").HtmlAttributes(new { onclick = "clickme()", style = "background-color:rgba(var(--bs-primary-rgb),var(--bs-text-opacity))!important;color:#3b76e1;" }).Content("Reply").IconClass("fas fa-reply")
+
+                        )*@
+                    @*@(Html.Kendo().Button()
+                        .Name("Close").HtmlAttributes(new { onclick = "closeTicket()", style = "background-color:rgba(var(--bs-primary-rgb),var(--bs-text-opacity))!important;color:#3b76e1;" }).Content("Close").IconClass("fas fa-reply")
+
+                        )*@
+                    
+                    <br />
+                    <br />
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script type="kendo-template" id="my-template">
+    <div class="container mt-5">
+    <div class="row  d-flex justify-content-center">
+        <div class="col-md-8">
+            <div class="headings d-flex justify-content-between align-items-center mb-3">
+                <div class="buttons">
+                </div>
+            </div>
+            <div class="card p-3">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="user d-flex flex-row align-items-center">
+                        <span>
+                            <small class="font-weight-bold text-primary"> #= getTextByValue(data)# : </small>  <small class="font-weight-bold"> #:Message#
+                            </small>
+                        </span>
+                    </div>
+                    <small>#= kendo.toString(Date,"dd/MM/yyyy hh:mm:ss") #</small>
+                </div>
+                <div class="action d-flex justify-content-between mt-2 align-items-center">
+                    <div class="icons align-items-center">
+                        <i class="fa fa-star text-warning"></i>
+                        <i class="fa fa-check-circle-o check-icon"></i>
+                    </div>
+                </div>
+            </div
+               </div>
+                  </div>
+</script>
+<script>
+    var myTemplate = kendo.template($('#my-template').html());
+    $('#gridReply').data('kendoGrid').refresh();
+    var collection; // global object which you can use as dictionary to get text for particular id
+    function getTextByValue(data) {
+        //if the collection is empty - get it from the grid
+        if (!collection) {
+            grid = $("#gridReply").data("kendoGrid");
+            valuesCollection = grid.options.columns[2].values;//Set the correct FKColumn index
+            collection = {};
+            for (var value in valuesCollection) {
+                collection[valuesCollection[value].value] = valuesCollection[value].text;
+            }
+        }
+        return collection[data.UserId];
+    }
+    $("#datetimepicker").kendoDateTimePicker({
+        format: "yyyy/MM/dd hh:mm tt"
+    });
+</script>
+
+@(
+Html.Kendo().Grid<MovieStreaming.Areas.Admin.Models.Complaint.Reply>()
+                                    .Name("gridReply")
+                                    .Columns(columns =>
+                                    {
+                                        columns.Bound(p => p.Id).Hidden(true);
+                                        columns.Bound(p => p.Message).Title("Message").Width(150).Hidden(true);
+                                        columns.ForeignKey(p => p.UserId, (System.Collections.IEnumerable)ViewBag.User, "Value", "Text").Title("User").Width(150).Hidden(true);
+                                        columns.Bound(p => p.Date).Hidden(true);
+                                        @* columns.ForeignKey(p => p.TicketId, (System.Collections.IEnumerable)ViewBag.Ticket, "Value", "Text").Title(language.Get("Ticket")).Width(150);
+
+*@
+                                    })
+
+                                    .ClientRowTemplate("#=myTemplate(data)#")
+                                    .Editable(editable => editable.Mode(GridEditMode.InLine))
+                                    .Pageable(pager => pager.Refresh(true).PageSizes(new[] { 10, 20, 30 }).Refresh(true))
+                                    .Scrollable()
+                                    .Filterable()
+                                    .Resizable(resize => resize.Columns(true))
+                                    .HtmlAttributes(new { style = "height:700px;border-style: none;" })
+                                    .DataSource(dataSource => dataSource
+                                    .Ajax()
+                                    .Events(events => events.Error("onError"))
+                                    .Events(e => e.Sync("sync_handler"))
+                                    .PageSize(20)
+
+                                    .Model(model =>
+                                    {
+                                        model.Id(p => p.Id);
+
+                                    })
+                                    .Read(read => read.Action("GetAllReplies", "Ticket", new { ticketId = ViewBag.TicketId })))
+
+
+    )
+
+<script>
+    function clickme(e) {
+        var w = $("#clickme").data("kendoWindow");
+        w.refresh({
+            url: '@Url.Action("Reply", "Complaint")' + '?ticketId=' + @ViewBag.TicketId
+                });
+        w.open();
+    }
+
+    $(document).ready(function () {
+        textarea = $("#description").data("kendoTextArea");
+        textarea.readonly();
+        title = $("#title").data("kendoTextArea");
+        title.readonly();
+    });
+
+    function closeTicket(){
+
+        window.location.href = '@Url.Action("CloseTicket","Ticket")' + '?ticketId=' + @ViewBag.TicketId;
+
+    }
+</script>
+
+@(Html.Kendo().Window()
+    .Name("clickme")
+     .Height(400)
+    .Width(500)
+    .Position(p => { p.Top(250); p.Left(650); })
+    .Visible(false)
+    .Modal(true)
+    .Actions(actions => actions.Pin().Close())
+    )

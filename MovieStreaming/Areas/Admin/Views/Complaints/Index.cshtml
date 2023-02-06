@@ -1,6 +1,9 @@
-﻿@using Kendo.Mvc.UI
-@using MovieStreaming.Areas.Admin.Models;
-@using MovieStreaming.Areas.Admin.Models.Complaint
+﻿@{
+}
+@using Kendo.Mvc.UI
+@using MovieStreaming.Custom.Models
+@using MovieStreaming.Custom.Helpers
+
 <script src="~/kendo/js/jszip.min.js"></script>
 <script>
 
@@ -8,10 +11,11 @@
         e.sender.read();
     }
 
-    function viewDetails(e) {
-        window.location.href = '@Url.Action("Details","Complaint")' + "/" + this.dataItem(jQuery(e.currentTarget).closest("tr")).Id;
-    }
+    function showDetails(e){
 
+        window.location.href = '@Url.Action("Details", "Complaint")' + '?ticketId=' + this.dataItem(jQuery(e.currentTarget).closest("tr")).Id;
+
+    }
 </script>
 <style>
     .k-grid-header {
@@ -53,6 +57,11 @@
         color: #f56e6e;
         background-color: rgba(245,110,110,.1);
     }
+
+    .k-command-cell .k-grid-details {
+        color: #0E6655;
+        background-color: #E8F6F3;
+    }
 </style>
 <div class="container">
     <div class="row">
@@ -61,42 +70,34 @@
                 <div class="card-header">
                     <div class="d-flex align-items-start">
                         <div class="flex-grow-1">
-                            <h4>Complaints</h4>
+                            <h4>Your Tickets</h4>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        @(Html.Kendo().Grid<Complaint>()
-                            .Name("gridComplaints")
+                        @(
+                            Html.Kendo().Grid<MovieStreaming.Areas.Admin.Models.Complaint.Complaint>()
+                            .Name("gridTicket")
                             .Columns(columns =>
                             {
                                 columns.Bound(p => p.Id).Hidden(true);
                                 columns.Bound(p => p.Title).Title("Title").Width(150);
                                 columns.Bound(p => p.Description).Title("Description").Width(150);
-                                columns.Bound(p => p.TypeId).Title("Type").Width(150);
-                                columns.Bound(p => p.SeverityId).Title("Severity").Width(150);
-
+                                columns.Bound(p => p.IsActive).Title("Is Active").Width(150);
+                                columns.ForeignKey(p => p.TypeId, (System.Collections.IEnumerable)ViewBag.Type, "Value", "Text").Title("Type").Width(150);
+                                columns.ForeignKey(p => p.SeverityId, (System.Collections.IEnumerable)ViewBag.Severity, "Value", "Text").Title("Severity").Width(150);
                                 columns.Command(command =>
                                 {
-                                    command.Edit().Text("Edit").UpdateText("Save").CancelText("Cancel");
-                                    command.Destroy().Text("Delete");
-                                    command.Custom("Details").Click("viewDetails");
-                                })
-                                .Width(100);
+
+                                    command.Custom("details").Text("Details").Click("showDetails").IconClass("fas fa-detail");
+
+
+                                }).Width(150);
 
                             })
-                            .ToolBar(tools =>
-                            {
-                                tools.Create().Text("Add").HtmlAttributes(new { style = "color:#fff;background-color: #3b76e1;border-color: #3b76e1;" });
-                                tools.Excel().Text("Export");
-                            })
                             .Editable(editable => editable.Mode(GridEditMode.InLine))
-                            .Excel(excel => excel
-                            .FileName("Complaints.xlsx")
-                            .Filterable(true)
-                            .AllPages(true)
-                            .ProxyURL(Url.Action("ExportToFile", "Home")))
+
                             .Pageable(pager => pager.Refresh(true).PageSizes(new[] { 10, 20, 30 }).Refresh(true))
                             .Sortable()
                             .Scrollable()
@@ -112,13 +113,13 @@
                                 model.Id(p => p.Id);
 
                             })
-                            .Read(read => read.Action("Read_Complaints", "Complaint"))
-                            .Update(update => update.Action("Update_Complaints", "Complaint"))
-                            .Create(create => create.Action("Create_Complaints", "Complaint"))
-                            .Destroy(delete => delete.Action("Delete_Complaints", "Complaint"))
+                            .Read(read => read.Action("GetAllTickets", "Complaint"))
+
+
                             )
                             )
                     </div>
+
                 </div>
             </div>
         </div>
