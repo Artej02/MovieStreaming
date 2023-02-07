@@ -1,46 +1,135 @@
-﻿<div id="smart-button-container">
-    <div style="text-align: center;">
-        <div id="paypal-button-container"></div>
+﻿@{
+}
+@using Kendo.Mvc.UI;
+@using MovieStreaming.Custom.Models;
+@using MovieStreaming.Custom.Models.Configuration
+@model MovieStreaming.Areas.Admin.Models.User.User
+<style>
+    body[data-layout=horizontal] .page-content {
+        margin-top: 0px;
+    }
+</style>
+
+<script>
+    function gotoPayment(){
+        window.location.href = '@Url.Action("AddSubscription","Dashboard")';
+    }
+    if(Cookies.get("subbed") == false){
+        window.location.href = '@Url.Action("UnSubscribe","Dashboard")';
+    }
+</script>
+
+<div class="main-content">
+    <div class="page-content">
+        <div class="container-fluid" style="max-width: 100%;">
+            <div class="row">
+                <!-- end col -->
+                <div class="col-xxl-3">
+                    <div class="user-sidebar">
+                        <div class="card" style="width: 1000px; height: 750px; right:-300px;">
+                            <div class="card-body p-0">
+                                <div class="user-profile-img">
+                                    <img src="~/images/auth-bg-2.jpg"
+                                         class="profile-img profile-foreground-img rounded-top" style="height: 120px;"
+                                         alt="">
+                                    <div class="overlay-content rounded-top">
+                                        <div>
+                                            <div class="user-nav p-3">
+                                                <div class="d-flex justify-content-end">
+                                                   
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- end user-profile-img -->
+                                <div class="mt-n5 position-relative">
+                                    <div class="text-center">
+                                        <img src="~/images/person-user.png" alt=""
+                                             class="avatar-xl rounded-circle img-thumbnail">
+
+                                        <div class="mt-3">
+                                            <h5 class="mb-1">@Model.Name @Model.Surname</h5>
+                                            <p class="text-muted">User</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-3">
+                                    <div class="row text-center pb-3">
+                                        <div class="col-6 border-end">
+                                            <div class="p-1">
+                                                <h5 class="mb-1">Welcome</h5>
+                                                <p class="text-muted mb-0">Dear Customer</p>
+                                            </div>
+                                        </div>
+                                        <div class="col-6">
+                                            <div class="p-1">
+                                                @if(@Model.IsSubscribed == true)
+                                            {
+                                                <h5 class="mb-1">Your Subscription is</h5>
+                                                <p class="text-muted mb-0">Active</p>
+                                            }else{
+                                                <h5 class="mb-1">Your Subscription is</h5>
+                                                <p class="text-muted mb-0">Inactive</p>
+                                            }
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr class="mb-4">
+                                    <div class="mb-4">
+                                        <div class="d-flex align-items-start">
+                                        </div>
+                                        <div id="chart-radialBar" class="apex-charts" data-colors='["#3b76e1"]'></div>
+                                        <div class="text-center mt-4">
+                                            @if(@Model.IsSubscribed == true)
+                                            {
+                                                <h5>Thank you for your purchase!</h5>
+                                                <p class="text-muted">We wish you a pleasant viewing experience.</p>
+                                            }else{
+                                            @(Html.Kendo().Button()
+                                                          .Name("payButton")
+                                                          .Content("Subscribe Now!")
+                                                          .HtmlAttributes(new { style = "background-color:royalblue; color:white;", onclick="gotoPayment()"})
+                                                          )
+                                                <p class="text-muted">You must subscribe to access content.</p>
+                                            }
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <hr class="mb-4">
+                                <div class="px-4 mx-n3" data-simplebar style="height: 258px;">
+                                <div>
+                                    <h5 class="card-title mb-3">New Releases</h5>
+                                        <ul class="list-unstyled mb-0" id="firstlist" style="display: flex; flex-direction: row; justify-content: space-between;">
+                                        @foreach (var movie in ViewBag.NewMovies)
+                                        {
+                                            <li class="py-2">
+                                                <div class="d-flex align-items-start">
+                                                    <div class="flex-shrink-0 me-3">
+                                                        <div class="avatar-md h-auto p-1 py-2 bg-light rounded">
+                                                            <div class="text-center">
+                                                                <h5 class="mb-0">@movie.CreatedDate.Day</h5>
+                                                                <div>@movie.CreatedDate.ToString("MMM")</div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="flex-grow-1 pt-2 text-muted">
+                                                        <a class="mb-0" href="~/Users/Movies/Details/@movie.Id">@movie.Title</a>
+                                                        <p class="mb-0 text-muted">@movie.Description</p>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                            <!-- end card body -->
+                        </div>
+                        <!-- end card -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<script src="https://www.paypal.com/sdk/js?client-id=sb&enable-funding=venmo&currency=EUR" data-sdk-integration-source="button-factory"></script>
-<script>
-    function initPayPalButton() {
-        paypal.Buttons({
-            style: {
-                shape: 'pill',
-                color: 'blue',
-                layout: 'vertical',
-                label: 'paypal',
-
-            },
-
-            createOrder: function (data, actions) {
-                return actions.order.create({
-                    purchase_units: [{ "amount": { "currency_code": "EUR", "value": 14.04, "breakdown": { "item_total": { "currency_code": "EUR", "value": 12 }, "shipping": { "currency_code": "EUR", "value": 0 }, "tax_total": { "currency_code": "EUR", "value": 2.04 } } } }]
-                });
-            },
-
-            onApprove: function (data, actions) {
-                return actions.order.capture().then(function (orderData) {
-
-                    // Full available details
-                    console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-
-                    // Show a success message within this page, e.g.
-                    const element = document.getElementById('paypal-button-container');
-                    element.innerHTML = '';
-                    element.innerHTML = '<h3>Thank you for your payment!</h3>';
-
-                    // Or go to another URL:  actions.redirect('thank_you.html');
-
-                });
-            },
-
-            onError: function (err) {
-                console.log(err);
-            }
-        }).render('#paypal-button-container');
-    }
-    initPayPalButton();
-</script>
+</div>

@@ -74,7 +74,7 @@ namespace MovieStreaming.Controllers
                     Errors = "This user exists!"
                 });
             }
-            var createUpdateResult = await new Query().ExecuteAndGetInsId("CreateUpdateDeleteUsers @CRUDOperation,@Id,@Name,@Surname,@Username,@Password,@Salt,@RoleId,@IsApproved,@CreatedUserId,@UpdatedUserId,@CreatedDate,@UpdatedDate", new
+            var createUpdateResult = await new Query().ExecuteAndGetInsId("CreateUpdateDeleteUsers @CRUDOperation,@Id,@Name,@Surname,@Username,@Password,@Salt,@RoleId,@IsApproved,@CreatedUserId,@UpdatedUserId,@CreatedDate,@UpdatedDate,@IsSubscribed", new
             {
                 @CRUDOperation = user.Id.HasValue ? (int)CRUDOperation.Update : (int)CRUDOperation.Create,
                 @Id = user.Id,
@@ -88,7 +88,8 @@ namespace MovieStreaming.Controllers
                 @CreatedUserId = userId,
                 @UpdatedUserId = userId,
                 @CreatedDate = DateTime.Now,
-                @UpdatedDate = DateTime.Now
+                @UpdatedDate = DateTime.Now,
+                @IsSubscribed = false
             });
             if (createUpdateResult == 0)
             {
@@ -118,7 +119,7 @@ namespace MovieStreaming.Controllers
                 hashedPassword = password.Hash;
                 salt = password.Salt;
             }
-            var createUpdateResult = await new Query().Execute("CreateUpdateDeleteUsers @CRUDOperation,@Id,@Name,@Surname,@Username,@Password,@Salt,@RoleId,@IsApproved,@CreatedUserId,@UpdatedUserId,@CreatedDate,@UpdatedDate", new
+            var createUpdateResult = await new Query().Execute("CreateUpdateDeleteUsers @CRUDOperation,@Id,@Name,@Surname,@Username,@Password,@Salt,@RoleId,@IsApproved,@CreatedUserId,@UpdatedUserId,@CreatedDate,@UpdatedDate,@IsSubscribed", new
             {
                 @CRUDOperation = user.Id.HasValue ? (int)CRUDOperation.Update : (int)CRUDOperation.Create,
                 @Id = user.Id,
@@ -132,7 +133,8 @@ namespace MovieStreaming.Controllers
                 @CreatedUserId = userId,
                 @UpdatedUserId = userId,
                 @CreatedDate = DateTime.Now,
-                @UpdatedDate = DateTime.Now
+                @UpdatedDate = DateTime.Now,
+                @IsSubscribed = user.IsSubscribed
             });
             if (createUpdateResult.HasError)
             {

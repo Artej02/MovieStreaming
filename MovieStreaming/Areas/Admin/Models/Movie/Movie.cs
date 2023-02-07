@@ -1,9 +1,11 @@
-﻿namespace MovieStreaming.Areas.Admin.Models.Movie
+﻿using System;
+
+namespace MovieStreaming.Areas.Admin.Models.Movie
 {
     public class Movie
     {
 
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         public string Title { get; set; }
 
@@ -11,7 +13,7 @@
 
         public string Video { get; set; }
 
-        public decimal Cost { get; set; }
+        public DateTime CreatedDate { get; set; }
 
     }
 }

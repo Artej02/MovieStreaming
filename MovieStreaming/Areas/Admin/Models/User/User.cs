@@ -26,5 +26,6 @@ namespace MovieStreaming.Areas.Admin.Models.User
         public int? UpdatedUserId { get; set; }
         public DateTime? CreatedDate { get; set; }
         public DateTime? UpdatedDate { get; set; }
+        public bool? IsSubscribed { get; set; }
     }
 }

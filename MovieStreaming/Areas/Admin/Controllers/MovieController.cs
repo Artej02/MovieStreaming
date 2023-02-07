@@ -19,6 +19,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.Authorization;
 using MovieStreaming.Custom.Helpers;
+using MovieStreaming.Areas.Admin.Models.User;
+using MovieStreaming.Custom.Models.Configuration;
+using MovieStreaming.Custom.Models.LogsModel;
 
 namespace MovieStreaming.Areas.Admin.Controllers
 {
@@ -93,50 +96,35 @@ namespace MovieStreaming.Areas.Admin.Controllers
         }
 
 
-        public ActionResult Create_Movies([DataSourceRequest] DataSourceRequest request, Movie mov)
-            {
-            try
-            {
-                if (ModelState.IsValid)
-                {
-                    _context.Movies.Add(mov);
-                    _context.SaveChanges();
-                    var _comlist = _context.Movies.ToList();
-                    return Json(new[] { mov }.ToDataSourceResult(request, ModelState));
-                }
-                else
-                {
-                    return Json(_context.Movies.ToList());
-
-                }
-            }
-            catch (Exception ex)
-            {
-                return Json(ex.Message);
-            }
-        }
-
-        public ActionResult Update_Movies([DataSourceRequest] DataSourceRequest request, Movie mov)
+        public async Task<ActionResult> CreateUpdate_Movies([DataSourceRequest] DataSourceRequest request, Movie mov)
         {
-            try
+            var createUpdateResult = await new Query().ExecuteAndGetInsId("CreateUpdateDeleteMovies @CRUDOperation,@Id,@Title,@Description,@Video,@CreatedDate", new
             {
-                if (ModelState.IsValid)
-                {
-                    _context.Entry(mov).State = EntityState.Modified;
-                    _context.SaveChanges();
-                    return Json(new[] { mov }.ToDataSourceResult(request, ModelState));
-
-                }
-                else
-                {
-                    return Json(_context.Movies.ToList());
-                }
-            }
-            catch (Exception ex)
+                @CRUDOperation = mov.Id.HasValue ? (int)CRUDOperation.Update : (int)CRUDOperation.Create,
+                @Id = mov.Id,
+                @Title = mov.Title,
+                @Description = mov.Description,
+                @Video = mov.Video,
+                @CreatedDate = DateTime.Now
+               
+            });
+            if (createUpdateResult == 0)
             {
-                return Json(ex.Message);
+                return this.Json(new DataSourceResult
+                {
+                    Errors = "Error occurred! "
+                });
             }
+            //else if (createUpdateResult > 0)
+            //{
+            //    HasAffected = true;
+            //    var afterLogData = (await new Query().SelectSingle<UserLog>($"Select * From User Where Id={createUpdateResult}")).Result;
+            //    var serializedObject = new ChangeLogHelper().SerializeObject(null, afterLogData, (int)ChangeLogTable.Users, userId, (int)ChangeLogAction.Inserte);
+            //    var addLog = new ChangeLogHelper().AddLog(serializedObject);
+            //}
+            return Json(createUpdateResult);
         }
+    
 
         public ActionResult Delete_Movies([DataSourceRequest] DataSourceRequest request, Movie mov)
         {
