@@ -26,7 +26,7 @@
     </div>
     <div class="form-group">
         <label for="Video">Video:</label>
-        <input id="videoInput" asp-for="Video" type="text" class="form-control" />
+        <input id="videoInput" asp-for="Video" type="text" class="form-control" style="pointer-events:none;" />
         <div>
          @(Html.Kendo().Upload()
           .Name("files")
@@ -38,10 +38,6 @@
           .Events(events => events.Success("onSuccess"))
           )
           </div>
-    </div>
-    <div class="form-group">
-        <label for="Cost">Cost:</label>
-        <input id="costInput" type="text" class="form-control" asp-for="Cost" />
     </div>
     <div class="mt-5 mb-4">
         @(Html.Kendo().Button()
@@ -58,14 +54,13 @@
   let formData = {
       Title: $("#titleInput").val(),
       Description: $("#descriptionInput").val(),
-      Video: $("#videoInput").val(),
-      Cost: $("#costInput").val()
+      Video: $("#videoInput").val()
   };
   
   console.log(formData);
 
   $.ajax({
-    url: "@Url.Action("Create_Movies", "Movie")",
+    url: "@Url.Action("CreateUpdate_Movies", "Movie")",
     type: "POST",
     data: formData,
     success: function(response) {

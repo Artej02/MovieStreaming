@@ -1,0 +1,43 @@
+﻿@using Kendo.Mvc.UI;
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<div class="card-js" id="myCard" style="display: table;
+    position: relative;
+    right: -304px;
+    margin-top: 73px;">
+<input class="card-number my-custom-class" name="card-number" id="nr">
+<input class="name" id="the-card-name-id" name="card-holders-name" placeholder="Name on card">
+<input class="expiry-month" name="expiry-month" id="expm">
+<input class="expiry-year" name="expiry-year" id="expy">
+<input class="cvc" name="cvc">
+</div>
+@(Html.Kendo().Button()
+              .Name("submitPayment")
+              .HtmlAttributes(new { style = "background-color:royalblue; color:white;", onclick="finalisePayment()"})
+              .Content("Complete Purchase")
+)
+<script>
+    function finalisePayment(){
+       //if ($("#myCard").cardNumber == "" || $("#myCard").name == "" || $("#myCard").expiryMonth == "" || $("#myCard").expiryYear == "" || $("#myCard").cvc == "" || ) {
+       //     Swal.fire('Please fill out all the details!')
+       //     return false;
+       //}
+        $.ajax({
+            type: "POST",
+            url: "@Url.Action("Subscribe","Dashboard")",
+            success: function(){
+                Swal.fire({
+                        title: 'You have been subscribed, thank you!',
+                        showConfirmButton: true,
+                        showDenyButton: false,
+                        showCancelButton: false,
+                        confirmButtonText: 'Ok',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = '@Url.Action("Index","Movies")';
+                            Cookies.set('subbed', true, { expires: inFiveMinutes });
+                        }
+                    })
+            }
+        })
+    }
+</script>

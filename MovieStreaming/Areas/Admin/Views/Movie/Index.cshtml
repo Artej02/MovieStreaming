@@ -75,7 +75,7 @@
                                 columns.Bound(p => p.Title).Title("Title").Width(150);
                                 columns.Bound(p => p.Description).Title("Description").Width(150);
                                 columns.Bound(p => p.Video).Title("Video").Width(150);
-                                columns.Bound(p => p.Cost).Title("Cost").Width(150);
+                                columns.Bound(p => p.CreatedDate).Title("Created Date").Width(150);
 
                                 columns.Command(command =>
                                 {
@@ -113,8 +113,8 @@
 
                             })
                             .Read(read => read.Action("Read_Movies", "Movie"))
-                            .Update(update => update.Action("Update_Movies", "Movie"))
-                            .Create(create => create.Action("Create_Movies", "Movie"))
+                            .Update(update => update.Action("CreateUpdate_Movies", "Movie"))
+                            .Create(create => create.Action("CreateUpdate_Movies", "Movie"))
                             .Destroy(delete => delete.Action("Delete_Movies", "Movie"))
                             )
                             )
