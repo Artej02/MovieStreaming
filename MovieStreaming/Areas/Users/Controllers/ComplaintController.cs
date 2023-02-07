@@ -38,7 +38,7 @@ namespace MovieStreaming.Areas.Users.Controllers
         }
         public ActionResult Form()
         {
-            ViewBag.C = true; 
+            ViewBag.CF = true; 
             return View();
         }
 
