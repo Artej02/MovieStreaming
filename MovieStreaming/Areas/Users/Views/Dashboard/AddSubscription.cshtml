@@ -1,5 +1,6 @@
 ﻿@using Kendo.Mvc.UI;
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
 <div class="card-js" id="myCard" style="display: table;
     position: relative;
     right: -304px;
@@ -12,19 +13,28 @@
 </div>
 @(Html.Kendo().Button()
               .Name("submitPayment")
-              .HtmlAttributes(new { style = "background-color:royalblue; color:white;", onclick="finalisePayment()"})
+              .HtmlAttributes(new { style = "background-color:royalblue; color:white; right: -700px; margin-top: 20px;", onclick="finalisePayment()"})
               .Content("Complete Purchase")
 )
 <script>
     function finalisePayment(){
-       //if ($("#myCard").cardNumber == "" || $("#myCard").name == "" || $("#myCard").expiryMonth == "" || $("#myCard").expiryYear == "" || $("#myCard").cvc == "" || ) {
-       //     Swal.fire('Please fill out all the details!')
-       //     return false;
-       //}
+        var nr = $("#nr").val();
+        var cardname = $("#the-card-name-id").val();
+        var expm = $("#expm").val();
+        var expy = $("#expy").val();
+        var cvc = $("#cvc").val();
+
+        if (nr == "" || cardname == "" || expm == "" || expy == "" || cvc == "") {
+            Swal.fire('Please fill out all the details!')
+            return false;
+       }
         $.ajax({
             type: "POST",
             url: "@Url.Action("Subscribe","Dashboard")",
             success: function(){
+                var inFiveMinutes = 1 / 288;
+                Cookies.set('subbed', true, { expires: inFiveMinutes });
+                
                 Swal.fire({
                         title: 'You have been subscribed, thank you!',
                         showConfirmButton: true,
@@ -33,8 +43,7 @@
                         confirmButtonText: 'Ok',
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            window.location.href = '@Url.Action("Index","Movies")';
-                            Cookies.set('subbed', true, { expires: inFiveMinutes });
+                            window.location.href = '@Url.Action("Index","Dashboard")';
                         }
                     })
             }
