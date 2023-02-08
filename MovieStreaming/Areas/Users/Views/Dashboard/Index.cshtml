@@ -4,6 +4,9 @@
 @using MovieStreaming.Custom.Models;
 @using MovieStreaming.Custom.Models.Configuration
 @model MovieStreaming.Areas.Admin.Models.User.User
+
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script>
+
 <style>
     body[data-layout=horizontal] .page-content {
         margin-top: 0px;
@@ -14,9 +17,17 @@
     function gotoPayment(){
         window.location.href = '@Url.Action("AddSubscription","Dashboard")';
     }
-    if(Cookies.get("subbed") == false){
+
+    var cookie = Cookies.get("subbed");
+
+    $(document).ready(function () {
+    console.log(cookie);
+    if(cookie == undefined){
+        Cookies.set("subbed",false);
+        console.log("unsubbing");
         window.location.href = '@Url.Action("UnSubscribe","Dashboard")';
     }
+    });
 </script>
 
 <div class="main-content">
