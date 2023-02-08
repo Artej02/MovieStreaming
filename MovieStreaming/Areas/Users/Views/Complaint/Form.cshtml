@@ -121,14 +121,7 @@
             url: "@Url.Action("CreateComplaint", "Complaint")",
             data: ticketObject,
             success: function (data) {
-
-                if (!data.HasError) {
-                    Swal.fire('Thank you for your feedback!')
-                }
-                else {
-                    console.log("failed");
-                }
-
+               console.log('nothing');
             }
         })
 

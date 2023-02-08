@@ -75,11 +75,11 @@
                             {
                                 columns.Bound(p => p.Id).Hidden(true);
                                 columns.Bound(p => p.EntryUserId).Title("Title").Width(150);
-                                columns.Bound(p => p.Before).Title("Description").Width(150);
-                                columns.Bound(p => p.After).Title("Video").Width(150);
-                                columns.Bound(p => p.TableId).Title("Cost").Width(150);
-                                columns.Bound(p => p.InsertDate).Title("Cost").Width(150);
-                                columns.Bound(p => p.ActionType).Title("Cost").Width(150);
+                                columns.Bound(p => p.Before).Title("Description").Width(150).Hidden(true);
+                                columns.Bound(p => p.After).Title("After").Width(150).Hidden(true);
+                                columns.Bound(p => p.TableId).Title("Table").Width(150);
+                                columns.Bound(p => p.InsertDate).Title("Date").Width(150);
+                                columns.Bound(p => p.ActionType).Title("Action").Width(150);
 
                                 columns.Command(command =>
                                 {
@@ -92,12 +92,10 @@
                             })
                             .ToolBar(tools =>
                             {
-                                tools.Create().Text("Add").HtmlAttributes(new { style = "color:#fff;background-color: #3b76e1;border-color: #3b76e1;" });
                                 tools.Excel().Text("Export");
                             })
-                            .Editable(editable => editable.Mode(GridEditMode.InLine))
                             .Excel(excel => excel
-                            .FileName("Movies.xlsx")
+                            .FileName("Logs.xlsx")
                             .Filterable(true)
                             .AllPages(true)
                             .ProxyURL(Url.Action("ExportToFile", "Home")))

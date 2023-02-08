@@ -42,9 +42,10 @@
         let objectToPost = {
             Message: $("#Message").val(),
         }
+
         $.ajax({
             type: "POST",
-            url: '@Url.Action("CreateReply", "Complaints")' + '?complaintId=' + @ViewBag.ComplaintId,
+            url: '@Url.Action("CreateReply", "Complaints", new { complaintId = ViewBag.ComplaintId })',
             data: objectToPost,
             success: function (data) {
                 console.log(data)

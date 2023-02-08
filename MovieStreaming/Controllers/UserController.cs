@@ -101,7 +101,7 @@ namespace MovieStreaming.Controllers
             else if (createUpdateResult > 0)
             {
                 HasAffected = true;
-                var afterLogData = (await new Query().SelectSingle<UserLog>($"Select * From User Where Id={createUpdateResult}")).Result;
+                var afterLogData = (await new Query().SelectSingle<UserLog>($"Select * From [User] Where Id={createUpdateResult}")).Result;
                 var serializedObject = new ChangeLogHelper().SerializeObject(null, afterLogData, (int)ChangeLogTable.Users, userId, (int)ChangeLogAction.Inserte);
                 var addLog = new ChangeLogHelper().AddLog(serializedObject);
             }

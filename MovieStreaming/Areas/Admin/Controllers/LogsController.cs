@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Authorization;
 using MovieStreaming.Custom.Helpers;
 using System.Threading.Tasks;
 using MovieStreaming.Custom.DatabaseHelpers;
+using System.Web.WebPages.Html;
 
 namespace MovieStreaming.Areas.Admin.Controllers
 {

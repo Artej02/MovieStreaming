@@ -44,7 +44,7 @@
 
         $.ajax({
             type: "POST",
-            url: '@Url.Action("CreateReply", "Complaint")' + '?complaintId=' + @ViewBag.ComplaintId,
+            url: '@Url.Action("CreateReply", "Complaint", new { complaintId = ViewBag.ComplaintId })',
             data: objectToPost,
             success: function (data) {
                 console.log(data)

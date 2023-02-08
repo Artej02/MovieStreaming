@@ -119,6 +119,16 @@
                                         <i class="icon nav-icon" style="@(ViewBag.CL==true?"fill:#3b76e1;":"")" data-eva="archive"></i>Changelog
                                     </a>
                                 </li>
+                                <li class="nav-item @(ViewBag.VA==true?"active":"")">
+                                    <a class="nav-link @(ViewBag.VA==true?"active":"")" asp-area="Admin" asp-controller="ViewAuthorization" asp-action="Index">
+                                        <i class="icon nav-icon" style="@(ViewBag.VA==true?"fill:#3b76e1;":"")" data-eva="lock"></i>ViewAuthorization
+                                    </a>
+                                </li>
+                                <li class="nav-item" style="right:-630px; position:relative;">
+                                    <a class="nav-link " asp-area="Users" asp-controller="Movies" asp-action="Index">
+                                        <i class="icon nav-icon" data-eva="camera"></i>Preview Movies
+                                    </a>
+                                </li>
                         </ul>
                     </div>
                     </nav>

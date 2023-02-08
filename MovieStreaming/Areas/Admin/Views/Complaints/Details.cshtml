@@ -216,7 +216,7 @@
     function clickme(e) {
         var w = $("#clickme").data("kendoWindow");
         w.refresh({
-            url: '@Url.Action("Reply", "Complaints")' + '?complaintId=' + @ViewBag.ComplaintId
+            url: '@Url.Action("Reply", "Complaints", new { complaintId = ViewBag.ComplaintId })'
                 });
         w.open();
     }
@@ -229,7 +229,7 @@
 
     function closeTicket() {
 
-        window.location.href = '@Url.Action("CloseComplaint","Complaints")' + '?complaintId=' + @ViewBag.ComplaintId;
+        window.location.href = '@Url.Action("CloseComplaint","Complaints")' + '/' + @ViewBag.ComplaintId;
 
     }
 </script>

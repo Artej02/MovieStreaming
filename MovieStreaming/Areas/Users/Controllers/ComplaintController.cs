@@ -43,7 +43,6 @@ namespace MovieStreaming.Areas.Users.Controllers
         }
 
         public async Task<ActionResult> Details(Complaint com)
-        
         {
             ViewBag.ComplaintId = com.Id;
             ViewBag.Complaint = (await new Query().Select<SelectListItem>($"select Id as [Value], [Title] as [Text] from Complaint")).Result;
@@ -104,36 +103,13 @@ namespace MovieStreaming.Areas.Users.Controllers
 
                 });
             }
-            return Json(HasAffected);
+            return Json(HasAffected, new { HasError = false });
         }
 
         private ActionResult Email(int? userID)
         {
             MailHelper mailHelper = new MailHelper(Configuration);
             return Json(mailHelper.SendEmailForTicketCreation(userID));
-
-        }
-
-        public async Task<ActionResult> CloseComplaint(Complaint complaint, int complaintId)
-        {
-
-            var createUpdateResult = await new Query().Execute($"UPDATE [Complaint] SET IsActive = @IsActive WHERE Id = {complaintId}", new
-
-            {
-
-                @IsActive = false
-
-            });
-
-            if (createUpdateResult.HasError)
-            {
-                return this.Json(new DataSourceResult
-                {
-                    Errors = "Error occurred! "
-                });
-
-            }
-            return RedirectToAction("Details", "Complaint", new { complaintId });
 
         }
 
@@ -166,7 +142,7 @@ namespace MovieStreaming.Areas.Users.Controllers
             return Json(new { Data = result.Result });
         }
 
-        public async Task<ActionResult> Reply(int complaintId)
+        public ActionResult Reply(int complaintId)
         {
             ViewBag.ComplaintId = complaintId;
             return View();
@@ -198,6 +174,7 @@ namespace MovieStreaming.Areas.Users.Controllers
         public async Task<ActionResult> CreateReply(Reply reply, int complaintId)
         {
             var userId = new AuthorizeHelper(HttpContext).GetUserID();
+            var userName = new AuthorizeHelper(HttpContext).GetUserName();
             if (ModelState.IsValid)
             {
                 var createUpdateResult = await new Query().Execute("INSERT INTO [Reply] (ComplaintId,Message,UserId,Date,Email) VALUES (@ComplaintId,@Message,@UserId,@Date,@Email)", new
@@ -207,7 +184,7 @@ namespace MovieStreaming.Areas.Users.Controllers
                     @Message = reply.Message,
                     @UserId = userId,
                     @Date = DateTime.Now,
-                    @Email = reply.Email
+                    @Email = userName
 
 
                 });

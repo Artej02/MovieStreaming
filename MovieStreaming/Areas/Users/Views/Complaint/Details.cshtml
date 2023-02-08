@@ -204,7 +204,7 @@ Html.Kendo().Grid<MovieStreaming.Areas.Admin.Models.Complaint.Reply>()
     function clickme(e) {
         var w = $("#clickme").data("kendoWindow");
         w.refresh({
-            url: '@Url.Action("Reply", "Complaint")' + '?complaintId=' + @ViewBag.ComplaintId
+            url: '@Url.Action("Reply", "Complaint", new { complaintId = ViewBag.ComplaintId })'
                 });
         w.open();
     }
@@ -218,7 +218,7 @@ Html.Kendo().Grid<MovieStreaming.Areas.Admin.Models.Complaint.Reply>()
 
     function closeTicket(){
 
-        window.location.href = '@Url.Action("CloseComplaint","Complaint")' + '?complaintId=' + @ViewBag.ComplaintId;
+        window.location.href = '@Url.Action("CloseComplaint","Complaint")' + '/' + @ViewBag.ComplaintId;
 
     }
 </script>

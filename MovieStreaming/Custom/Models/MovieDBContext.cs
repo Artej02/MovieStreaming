@@ -60,6 +60,15 @@ namespace MovieStreaming.Custom.Models
                 entity.Property(e => e.Title).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<ChangeLog>(entity =>
+            {
+                entity.ToTable("ChangeLog");
+
+                entity.Property(e => e.Before).HasMaxLength(50);
+                entity.Property(e => e.After).HasMaxLength(50);
+
+            });
+
             OnModelCreatingPartial(modelBuilder);
 
         }

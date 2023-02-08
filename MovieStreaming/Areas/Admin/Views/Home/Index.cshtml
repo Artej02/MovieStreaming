@@ -1,3 +1,180 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@using Kendo.Mvc.UI;
+@using MovieStreaming.Custom.Models;
+@using MovieStreaming.Custom.Models.Configuration
+@model MovieStreaming.Areas.Admin.Models.Movie.Movie
+<div class="row">
+    <div class="col-xl-3">
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="d-flex align-items-start">
+                                <div class="flex-grow-1">
+                                    <div class="avatar">
+                                        <div class="avatar-title rounded bg-primary bg-gradient">
+                                            <i data-eva="pie-chart-2" class="fill-white"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="d-flex">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <h4 class="text-truncate mb-1">@ViewBag.Total</h4>
+                                        <p class="text-truncate text-muted mb-0">Total Movies</p>
+                                    </div>
+                                    <div class="flex-shrink-0 align-self-center">
+                                        <div id="chart-sparkline1" data-colors='["#63ad6f"]'></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end card body -->
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end col -->
+
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="d-flex align-items-start">
+                                <div class="flex-grow-1">
+                                    <div class="avatar">
+                                        <div class="avatar-title rounded bg-primary bg-gradient">
+                                            <i data-eva="activity" class="fill-white"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="d-flex">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <h4 class="text-truncate mb-1">@ViewBag.TotalUsers</h4>
+                                        <p class="text-truncate text-muted mb-0">Total Users</p>
+                                    </div>
+                                    <div class="flex-shrink-0 align-self-center">
+                                        <div id="chart-sparkline2" data-colors='["#f56e6e"]'></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end card body -->
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="d-flex align-items-start">
+                                <div class="flex-grow-1">
+                                    <div class="avatar">
+                                        <div class="avatar-title rounded bg-primary bg-gradient">
+                                            <i data-eva="archive" class="fill-white"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="d-flex">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <h4 class="text-truncate mb-1">@ViewBag.ActiveComplaints</h4>
+                                        <p class="text-truncate text-muted mb-0">Active Complaints</p>
+                                    </div>
+                                    <div class="flex-shrink-0 align-self-center">
+                                        <div id="chart-sparkline3" data-colors='["#f56e6e"]'></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end card body -->
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end col -->
+
+            <div class="col-sm-6">
+                <div class="card">
+                    <div class="card-body">
+                        <div>
+                            <div class="d-flex align-items-start">
+                                <div class="flex-grow-1">
+                                    <div class="avatar">
+                                        <div class="avatar-title rounded bg-primary bg-gradient">
+                                            <i data-eva="checkmark-square-2" class="fill-white"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mt-4">
+                                <div class="d-flex">
+                                    <div class="flex-grow-1 overflow-hidden">
+                                        <h4 class="text-truncate mb-1">@ViewBag.SubbedUsers</h4>
+                                        <p class="text-truncate text-muted mb-0">Subscribed Users</p>
+                                    </div>
+                                    <div class="flex-shrink-0 align-self-center">
+                                        <div id="chart-sparkline4" data-colors='["#63ad6f"]'></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end card body -->
+                </div>
+                <!-- end card -->
+            </div>
+            <!-- end col -->
+        </div>
+        <!-- end row -->
+    </div>
+    <div class="col-xl-9">
+        <div class="card">
+            <div class="card-header border-0 responsive-header clickableCard" onclick="window.location.href = '#'">
+                <h4 class="card-title">Movies across the year</h4>
+            </div>
+            <div class="card-body">
+                <div class="chart-wrapper">
+                    @(Html.Kendo().Chart<MovieStreaming.Areas.Admin.Models.Movie.MovieStats>()
+                        .Name("chartAssigned")
+                        .ChartArea(c => c.Height(333).Width(1100))
+                        .Legend(legend => legend
+                        .Position(ChartLegendPosition.Bottom)
+                        )
+                        .DataSource(ds => ds.Read(read => read.Action("GetSurveysByMonth", "Home")))
+                        .Series(series =>
+                        {
+                            series.Line(model => model.Count).Name("Movie").Color("#08f");
+
+                        })
+                        .CategoryAxis(axis => axis
+                        .Categories(model => model.Month)
+                        .Labels(labels => labels.Rotation("0"))
+
+                        )
+                        .ValueAxis(axis => axis
+                        .Numeric()
+                        // Move the label-axis all the way down the value axis
+                        .AxisCrossingValue(0, int.MinValue)
+                        )
+                        .Tooltip(tooltip => tooltip
+                        .Visible(true)
+
+                        )
+                        )
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- end col -->

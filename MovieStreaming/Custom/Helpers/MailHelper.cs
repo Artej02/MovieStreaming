@@ -105,7 +105,7 @@ namespace MovieStreaming.Custom.Helpers
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(Configuration["EmailCredenciale:Email"]);
             email.To.Add(MailboxAddress.Parse(userID.Result.Username));
-            email.Subject = "UBOResearchTool";
+            email.Subject = "MovieStreaming";
             email.Body = new TextPart(TextFormat.Html)
             {
 

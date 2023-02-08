@@ -82,10 +82,10 @@ namespace MovieStreaming.Areas.Admin.Controllers
             }
         }
 
-        public async Task<ActionResult> CloseComplaint(Complaint complaint, int complaintId)
+        public async Task<ActionResult> CloseComplaint(Complaint complaint)
         {
 
-            var createUpdateResult = await new Query().Execute($"UPDATE [Complaint] SET IsActive = @IsActive WHERE Id = {complaintId}", new
+            var createUpdateResult = await new Query().Execute($"UPDATE [Complaint] SET IsActive = @IsActive WHERE Id = {complaint.Id}", new
 
             {
 
@@ -101,7 +101,7 @@ namespace MovieStreaming.Areas.Admin.Controllers
                 });
 
             }
-            return RedirectToAction("Details", "Complaint", new { complaintId });
+            return RedirectToAction("Details", "Complaints", new { complaint.Id });
 
         }
 
@@ -151,7 +151,7 @@ namespace MovieStreaming.Areas.Admin.Controllers
         {
             ViewBag.ComplaintId = com.Id;
             ViewBag.Complaint = (await new Query().Select<SelectListItem>($"select Id as [Value], [Title] as [Text] from Complaint")).Result;
-            ViewBag.User = (await new Query().Select<SelectListItem>($"select Id as [Value], [Name] as [Text] from User")).Result;
+            ViewBag.User = (await new Query().Select<SelectListItem>($"select Id as [Value], [Name] as [Text] from [User]")).Result;
             var userId = new AuthorizeHelper(HttpContext).GetUserID();
             Models.User.User currentUser = (await new Query().SelectSingle<Models.User.User>($"select * from [User] where Id={userId}")).Result;
             if (currentUser.RoleId == 2)
