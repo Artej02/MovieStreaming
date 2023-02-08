@@ -31,7 +31,7 @@ namespace MovieStreaming.Custom.Helpers
             var email = new MimeMessage();
             email.Sender = MailboxAddress.Parse(Configuration["EmailCredenciale:Email"]);
             email.To.Add(MailboxAddress.Parse(user.Result.Username));
-            email.Subject = "UBOResearchTool";
+            email.Subject = "MovieStreaming";
             email.Body = new TextPart(TextFormat.Html)
             {
 
@@ -69,7 +69,7 @@ namespace MovieStreaming.Custom.Helpers
                 var email = new MimeMessage();
                 email.Sender = MailboxAddress.Parse(Configuration["EmailCredenciale:Email"]);
                 email.To.Add(MailboxAddress.Parse(admin.Username));
-                email.Subject = "UBOResearchTool";
+                email.Subject = "MovieStreaming";
                 email.Body = new TextPart(TextFormat.Html)
                 {
 
