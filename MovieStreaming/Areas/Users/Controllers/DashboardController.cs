@@ -45,7 +45,7 @@ namespace MovieStreaming.Areas.User.Controllers
                 @IsSubscribed = false
             });
 
-            return Json(createUpdateResult);
+            return RedirectToAction("Index","Dashboard");
         }
     }
 }

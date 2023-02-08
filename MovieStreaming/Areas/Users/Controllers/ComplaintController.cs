@@ -43,10 +43,11 @@ namespace MovieStreaming.Areas.Users.Controllers
         }
 
         public async Task<ActionResult> Details(Complaint com)
+        
         {
             ViewBag.ComplaintId = com.Id;
             ViewBag.Complaint = (await new Query().Select<SelectListItem>($"select Id as [Value], [Title] as [Text] from Complaint")).Result;
-            ViewBag.User = (await new Query().Select<SelectListItem>($"select Id as [Value], [Name] as [Text] from User")).Result;
+            ViewBag.User = (await new Query().Select<SelectListItem>($"select Id as [Value], [Name] as [Text] from [User]")).Result;
             var userId = new AuthorizeHelper(HttpContext).GetUserID();
   
             Complaint complaint = _context.Complaints.Find(com.Id);

@@ -7,16 +7,16 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js" crossorigin="anonymous"></script>
 <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<div class="pt-4 card">
+<div class="pt-4 card" style="margin-right: 800px; right: -350px;">
     <div class="form-div mb-2">
         <div class="row mt-3">
             <div class="flex-grow-1">
-                <h4>New Ticket</h4>
+                <h4 style="margin-left:10px;">New Ticket</h4>
             </div>
             <form id="ticketForm" class="k-form k-form-vertical" kendo-validator="true">
                 <ul class="k-form-group">
                     <li class="k-form-field">
-                        <label>Type:</label>
+                        <label style="margin-left:10px;">Type:</label>
                         @(Html.Kendo().DropDownList()
                             .Name("TypeId")
                             .DataTextField("Text")
@@ -32,29 +32,29 @@
                                 .Text("Web Related")
                                 .Value("2");
                             })
-                            .HtmlAttributes(new { style = "width:100% !important; background:#fff; border-radius:5px;" })
+                            .HtmlAttributes(new { style = "width:97% !important; background:#fff; border-radius:5px; margin-left: 7px;" })
                             )
                     </li>
                     <li class="k-form-field">
-                        <label>Title:</label>
+                        <label style="margin-left:10px;">Title:</label>
                         @(Html.Kendo().TextBox()
                             .Name("Title")
-                            .HtmlAttributes(new { required = "required", validationmessage = "Title is required!" })
+                            .HtmlAttributes(new { required = "required", validationmessage = "Title is required!", style = "width:95%; margin-left:10px;" })
                             )
                     </li>
                     <li class="k-form-field">
-                        <label>Description:</label>
+                        <label style="margin-left:10px;">Description:</label>
                         @(Html.Kendo().TextBox()
                             .Name("Description")
-                            .HtmlAttributes(new { required = "required", validationmessage = "Description is required!" })
+                            .HtmlAttributes(new { required = "required", validationmessage = "Description is required!", style = "width:95%; margin-left:10px;" })
                             )
                     </li>
 
                     <li class="k-form-field">
-                        <label>Severity:</label>
+                        <label style="margin-left:10px;">Severity:</label>
                         @(Html.Kendo().RadioGroup().Layout(RadioGroupLayout.Horizontal)
                             .Name("SeverityId")
-                            .HtmlAttributes(new { validationmessage = "Please select a Severity!", required = "required" })
+                            .HtmlAttributes(new { validationmessage = "Please select a Severity!", required = "required", style = "margin-left:10px;" })
                             .Items(i =>
                             {
                                 i.Add().Label("Low").Value("1");
@@ -71,7 +71,7 @@
                     @(Html.Kendo().Button()
                         .Name("saveButton")
                         .Content("Save")
-                        .HtmlAttributes(new { type = "submit", @class = "btn btn-success submit", style = "width:200px", value = "submit" })
+                        .HtmlAttributes(new { type = "submit", @class = "btn btn-success submit", style = "width:200px; margin-left:10px; background-color:royalblue; color:white;", value = "submit" })
                         )
                 </div>
             </form>
@@ -123,7 +123,7 @@
             success: function (data) {
 
                 if (!data.HasError) {
-                    console.log("success");
+                    Swal.fire('Thank you for your feedback!')
                 }
                 else {
                     console.log("failed");
